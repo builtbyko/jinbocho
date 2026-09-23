@@ -1,0 +1,29 @@
+{
+  "name": "jinbocho-street-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "node --preserve-symlinks --preserve-symlinks-main node_modules/vite/bin/vite.js",
+    "build": "node --preserve-symlinks --preserve-symlinks-main node_modules/typescript/bin/tsc -b && node --preserve-symlinks --preserve-symlinks-main node_modules/vite/bin/vite.js build",
+    "preview": "node --preserve-symlinks --preserve-symlinks-main node_modules/vite/bin/vite.js preview",
+    "validate:data": "node --preserve-symlinks --preserve-symlinks-main scripts/validate-data.mjs",
+    "test": "npm run validate:data && npm run build"
+  },
+  "dependencies": {
+    "maplibre-gl": "6.10.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@types/geojson": "7946.0.15",
+    "@vitejs/plugin-react": "6.0.2",
+    "typescript": "5.9.3",
+    "vite": "8.3.0"
+  }
+}
