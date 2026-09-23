@@ -54,6 +54,7 @@ function MapLegend({
   }
   if (visibleLayers.alleys) items.push({ label: "路地・細街路", color: "#495753", line: true });
   if (!items.length && !visibleLayers.bookEra) return null;
+  const hasPlaces = visibleLayers.antiquarian_bookstore || visibleLayers.bookstore || visibleLayers.cafe || visibleLayers.restaurant || visibleLayers.other;
 
   return (
     <aside className={`map-legend ${open ? "is-open" : ""}`} aria-label="凡例">
@@ -87,7 +88,13 @@ function MapLegend({
               </div>
             </div>
           )}
-          <p className="map-legend-note">建物色は代表用途、点は店の位置。</p>
+          {hasPlaces && (
+            <div className="map-legend-point-key">
+              <span className="map-legend-point" aria-hidden="true" />
+              <span>店の位置（拡大すると表示）</span>
+            </div>
+          )}
+          <p className="map-legend-note">色の面は建物の代表用途。</p>
         </div>
       )}
     </aside>
@@ -367,7 +374,7 @@ export default function App() {
                 </label>
               ))}
             </div>
-            <p className="layer-note">数字は件数（店は店舗数）。建物は代表用途の色、点は店の位置です。</p>
+            <p className="layer-note">数字は件数（店は店舗数）。色の面は建物の代表用途。拡大すると、白縁の丸で店の位置が出ます。</p>
             {visibleLayers.bookEra && <p className="layer-note">創業年代は色が濃いほど古い店です。確認できた店のみ表示します。</p>}
           </section>
         </aside>

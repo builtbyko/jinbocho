@@ -62,28 +62,6 @@ const ERA_COLOR: ExpressionSpecification = [
   ],
 ];
 
-const PLACE_COLOR: ExpressionSpecification = [
-  "match",
-  ["get", "category"],
-  "antiquarian_bookstore",
-  "#8d3f2d",
-  "bookstore",
-  "#cd7540",
-  "cafe",
-  "#2f6f68",
-  "restaurant",
-  "#6c5287",
-  "retail",
-  "#617999",
-  "culture",
-  "#9a8128",
-  "education",
-  "#9a8128",
-  "service",
-  "#617999",
-  "#69736f",
-];
-
 function getFeatureId(feature: MapGeoJSONFeature | undefined) {
   return String(feature?.properties?.id ?? "") || undefined;
 }
@@ -147,17 +125,17 @@ function syncBuildingSelection(map: MapLibreMap, selectedBuildingId?: string) {
 
 function syncPlaceSelection(map: MapLibreMap, selectedPlaceId?: string) {
   if (!map.getLayer("places-points")) return;
-  map.setPaintProperty("places-points", "circle-stroke-color", [
+  map.setPaintProperty("places-points", "circle-color", [
     "case",
     ["==", ["get", "id"], selectedPlaceId ?? ""],
-    "#17211f",
-    "#fffdf7",
+    "#a6533c",
+    "#263a35",
   ]);
   map.setPaintProperty("places-points", "circle-stroke-width", [
     "case",
     ["==", ["get", "id"], selectedPlaceId ?? ""],
     3,
-    ["interpolate", ["linear"], ["zoom"], 15.7, 1, 18, 1.8],
+    ["interpolate", ["linear"], ["zoom"], 17.2, 2, 18.3, 2.4],
   ]);
 }
 
@@ -342,13 +320,13 @@ export default function MapView({
         id: "places-points",
         type: "circle",
         source: "places",
-        minzoom: 15.7,
+        minzoom: 17.2,
         paint: {
-          "circle-radius": ["interpolate", ["linear"], ["zoom"], 15.7, 2.5, 18, 5.2],
-          "circle-color": PLACE_COLOR,
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 17.2, 4, 18.3, 5.4],
+          "circle-color": "#263a35",
           "circle-stroke-color": "#fffdf7",
-          "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 15.7, 1, 18, 1.8],
-          "circle-opacity": 0.95,
+          "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 17.2, 2, 18.3, 2.4],
+          "circle-opacity": 1,
         },
       });
       map.addLayer({

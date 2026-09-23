@@ -1366,6 +1366,28 @@ a:focus-visible {
   font-weight: 800;
 }
 
+.map-legend-point-key {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 11px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: #4e5854;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.map-legend-point {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fffdf7;
+  border-radius: 50%;
+  background: #263a35;
+  box-shadow: 0 0 0 1px rgb(38 58 53 / 35%);
+}
+
 .map-legend-note {
   margin: 10px 0 0;
   color: var(--muted);
