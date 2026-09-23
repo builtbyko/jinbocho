@@ -987,3 +987,283 @@ a:focus-visible {
     transition-duration: .01ms !important;
   }
 }
+
+/* The map controls are a plain list of independently selectable layers. */
+:root {
+  --paper: #f8f7f3;
+  --panel: #fff;
+  --line: #dedcd5;
+  --shadow: 0 10px 32px rgb(28 34 31 / 16%);
+}
+
+.app-shell {
+  grid-template-rows: 60px minmax(0, 1fr);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 19px;
+  background: var(--panel);
+}
+
+.brand-block {
+  display: block;
+}
+
+.brand-block h1 {
+  font-family: "Noto Sans JP", "Yu Gothic UI", "Hiragino Sans", sans-serif;
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: .01em;
+  line-height: 1.3;
+}
+
+.brand-kicker,
+.brand-jp,
+.topbar-center {
+  display: none;
+}
+
+.topbar-actions {
+  align-items: center;
+  gap: 8px;
+}
+
+.text-button {
+  padding: 8px 11px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.text-button:hover {
+  border-color: var(--line);
+  background: var(--paper);
+}
+
+.workspace {
+  grid-template-columns: 272px minmax(0, 1fr);
+}
+
+.sidebar {
+  background: var(--panel);
+}
+
+.search-block,
+.control-section {
+  padding: 18px 16px;
+}
+
+.search-block {
+  border-bottom: 1px solid var(--line);
+}
+
+.control-section {
+  border-bottom: 0;
+}
+
+.control-section h2 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.eyebrow {
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+
+.search-input-wrap {
+  margin-top: 8px;
+  border-color: var(--line);
+  border-radius: 5px;
+}
+
+.search-input-wrap input {
+  height: 40px;
+}
+
+.search-results {
+  left: 12px;
+  width: calc(100% - 24px);
+  border-radius: 5px;
+}
+
+.layer-list {
+  display: grid;
+  margin-top: 4px;
+}
+
+.layer-row {
+  display: grid;
+  grid-template-columns: 18px 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 8px 5px;
+  border-bottom: 1px solid #eeece7;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.layer-row:hover {
+  background: #f7f6f2;
+}
+
+.layer-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #4f7f78;
+  cursor: pointer;
+}
+
+.layer-swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgb(30 36 32 / 18%);
+  border-radius: 2px;
+}
+
+.layer-swatch.is-line {
+  width: 16px;
+  height: 0;
+  border: 0;
+  border-top: 3px dashed currentColor;
+  border-radius: 0;
+}
+
+.layer-swatch.is-era {
+  background: linear-gradient(90deg, #6c3328 0 25%, #9e5540 25% 50%, #c67b55 50% 75%, #e3aa75 75%);
+}
+
+.layer-name {
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.layer-count {
+  color: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.layer-note {
+  margin: 15px 2px 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.map-wrap {
+  background: #e8e6df;
+}
+
+.curated-map-label {
+  max-width: 160px;
+  padding: 5px 7px;
+  border-color: rgb(55 61 56 / 30%);
+  border-radius: 3px;
+  background: rgb(255 255 255 / 96%);
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.detail-panel,
+.about-panel {
+  top: 12px;
+  right: 12px;
+  width: min(370px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  border-radius: 6px;
+}
+
+.about-panel {
+  width: min(420px, calc(100% - 24px));
+}
+
+.mobile-menu,
+.mobile-filter-button {
+  border-radius: 5px;
+}
+
+@media (max-width: 960px) {
+  .topbar {
+    padding: 0 13px;
+  }
+
+  .text-button {
+    display: inline-block;
+  }
+
+  .mobile-menu {
+    display: grid;
+    width: 76px;
+    height: 36px;
+    place-items: center;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .sidebar {
+    width: min(320px, 88vw);
+  }
+
+  .control-section h2 {
+    display: none;
+  }
+
+  .mobile-filter-button {
+    top: 12px;
+    left: 12px;
+    padding: 9px 12px;
+    border-color: var(--line);
+    box-shadow: 0 3px 12px rgb(30 36 32 / 12%);
+    font-size: 12px;
+  }
+
+  .detail-panel,
+  .about-panel {
+    top: auto;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    width: auto;
+    max-height: min(66%, 580px);
+  }
+
+  .scrim {
+    inset: 60px 0 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-block h1 {
+    font-size: 17px;
+  }
+
+  .topbar-actions {
+    gap: 2px;
+  }
+
+  .text-button {
+    padding: 7px;
+    font-size: 11px;
+  }
+
+  .detail-head h2 {
+    font-size: 19px;
+  }
+
+  .maplibregl-ctrl-bottom-right {
+    bottom: 4px;
+  }
+}

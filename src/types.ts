@@ -1,6 +1,14 @@
 import type { Feature, FeatureCollection, Geometry, MultiPolygon, Point, Polygon } from "geojson";
 
-export type ThemeKey = "use" | "bookEra" | "food" | "alleys";
+export type LayerKey =
+  | "buildings"
+  | "antiquarian_bookstore"
+  | "bookstore"
+  | "cafe"
+  | "restaurant"
+  | "other"
+  | "bookEra"
+  | "alleys";
 
 export type PlaceCategory =
   | "antiquarian_bookstore"

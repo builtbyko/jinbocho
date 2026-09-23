@@ -1,38 +1,3 @@
-import type { ThemeKey } from "./types";
-
-export const themeLabels: Record<ThemeKey, { label: string; short: string; description: string }> = {
-  use: {
-    label: "地上階優先の店舗用途",
-    short: "用途",
-    description: "階情報がある店は地上階を優先し、未確認の店は路面店候補として建物へ結びます。",
-  },
-  bookEra: {
-    label: "古書店の創業年代",
-    short: "古書店年代",
-    description: "店の創業年を比較します。神保町での開業年・現在地への移転年とは区別しています。",
-  },
-  food: {
-    label: "喫茶と食の分布",
-    short: "喫茶・食",
-    description: "喫茶・カフェと飲食店の建物を強調し、本の街を支える滞在場所を読みます。",
-  },
-  alleys: {
-    label: "路地と抜け道",
-    short: "路地",
-    description: "歩行者道、細街路、サービス道路、階段を強調し、街区内部の動線を読みます。",
-  },
-};
-
-export const useLegend = [
-  ["antiquarian_bookstore", "古書店", "#a6533c"],
-  ["bookstore", "新刊・専門書店", "#d98a4e"],
-  ["cafe", "喫茶・カフェ", "#4f7f78"],
-  ["restaurant", "飲食店", "#7f6b9f"],
-  ["retail", "物販・サービス", "#7389a6"],
-  ["culture", "文化・学び", "#b29a45"],
-  ["unclassified", "未分類", "#d9d4c8"],
-] as const;
-
 export const eraLegend = [
   ["prewar", "1944年以前", "#6c3328"],
   ["1945-1969", "1945–1969", "#9e5540"],

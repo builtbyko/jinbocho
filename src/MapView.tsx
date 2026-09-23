@@ -7,15 +7,13 @@ import type {
   MapMouseEvent,
   MapGeoJSONFeature,
 } from "maplibre-gl";
-import type { AtlasData, ThemeKey } from "./types";
+import type { AtlasData, LayerKey, PlaceCategory } from "./types";
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 type Props = {
   data: AtlasData;
-  theme: ThemeKey;
-  showPlaces: boolean;
-  showAlleys: boolean;
+  visibleLayers: Record<LayerKey, boolean>;
   selectedBuildingId?: string;
   selectedPlaceId?: string;
   focusPlaceId?: string;
@@ -64,16 +62,6 @@ const ERA_COLOR: ExpressionSpecification = [
   ],
 ];
 
-const FOOD_COLOR: ExpressionSpecification = [
-  "match",
-  ["get", "primaryUse"],
-  "cafe",
-  "#3f7d75",
-  "restaurant",
-  "#7b5f96",
-  "#ddd9cf",
-];
-
 const PLACE_COLOR: ExpressionSpecification = [
   "match",
   ["get", "category"],
@@ -96,32 +84,58 @@ const PLACE_COLOR: ExpressionSpecification = [
   "#69736f",
 ];
 
-function buildingColor(theme: ThemeKey): ExpressionSpecification | string {
-  if (theme === "bookEra") return ERA_COLOR;
-  if (theme === "food") return FOOD_COLOR;
-  if (theme === "alleys") return "#d6d2c8";
-  return USE_COLOR;
-}
-
 function getFeatureId(feature: MapGeoJSONFeature | undefined) {
   return String(feature?.properties?.id ?? "") || undefined;
 }
 
-function syncThemeLayers(map: MapLibreMap, theme: ThemeKey, showAlleys: boolean) {
-  if (!map.getLayer("buildings-fill")) return;
-  map.setPaintProperty("buildings-fill", "fill-color", buildingColor(theme));
-  const visibility = showAlleys || theme === "alleys" ? "visible" : "none";
-  map.setLayoutProperty("alleys-casing", "visibility", visibility);
-  map.setLayoutProperty("alleys-line", "visibility", visibility);
+function categoryLayer(category: PlaceCategory): LayerKey {
+  switch (category) {
+    case "antiquarian_bookstore":
+    case "bookstore":
+    case "cafe":
+    case "restaurant":
+      return category;
+    default:
+      return "other";
+  }
 }
 
-function syncPlaceVisibility(map: MapLibreMap, showPlaces: boolean) {
-  if (!map.getLayer("places-points")) return;
-  map.setLayoutProperty("places-points", "visibility", showPlaces ? "visible" : "none");
-  const labelsVisible = showPlaces && map.getZoom() >= 17.2;
+function categoryFilter(property: "primaryUse" | "category", visibleLayers: Record<LayerKey, boolean>): ExpressionSpecification {
+  const categories = (["antiquarian_bookstore", "bookstore", "cafe", "restaurant"] as const)
+    .filter((category) => visibleLayers[category]);
+  const enabled = visibleLayers.other
+    ? [...categories, "retail", "culture", "education", "service", "other"]
+    : categories;
+  return enabled.length
+    ? ["in", ["get", property], ["literal", enabled]]
+    : ["==", ["get", property], "__none__"];
+}
+
+function syncCuratedLabels(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) {
+  const zoomedIn = map.getZoom() >= 17.2;
   map.getContainer().querySelectorAll<HTMLElement>(".curated-map-label").forEach((element) => {
-    element.hidden = !labelsVisible;
+    element.hidden = !zoomedIn || !visibleLayers[categoryLayer(element.dataset.category as PlaceCategory)];
   });
+}
+
+function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) {
+  if (!map.getLayer("buildings-fill")) return;
+  const baseVisibility = visibleLayers.buildings ? "visible" : "none";
+  map.setLayoutProperty("buildings-fill", "visibility", baseVisibility);
+  map.setLayoutProperty("buildings-outline", "visibility", baseVisibility);
+  const visibleCategories = categoryFilter("primaryUse", visibleLayers);
+  map.setFilter("buildings-category", visibleCategories);
+  map.setLayoutProperty("buildings-era", "visibility", visibleLayers.bookEra ? "visible" : "none");
+  const eraBuildings: ExpressionSpecification = ["all", ["==", ["get", "hasBookstore"], true], ["!=", ["get", "bookstoreEra"], "unknown"]];
+  map.setFilter(
+    "building-hit",
+    visibleLayers.buildings ? null : visibleLayers.bookEra ? ["any", visibleCategories, eraBuildings] : visibleCategories,
+  );
+  const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
+  map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
+  map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
+  map.setFilter("places-points", categoryFilter("category", visibleLayers));
+  syncCuratedLabels(map, visibleLayers);
 }
 
 function syncBuildingSelection(map: MapLibreMap, selectedBuildingId?: string) {
@@ -149,9 +163,7 @@ function syncPlaceSelection(map: MapLibreMap, selectedPlaceId?: string) {
 
 export default function MapView({
   data,
-  theme,
-  showPlaces,
-  showAlleys,
+  visibleLayers,
   selectedBuildingId,
   selectedPlaceId,
   focusPlaceId,
@@ -161,15 +173,11 @@ export default function MapView({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap>();
   const callbacksRef = useRef({ onSelectBuilding, onSelectPlace });
-  const themeRef = useRef(theme);
-  const showPlacesRef = useRef(showPlaces);
-  const showAlleysRef = useRef(showAlleys);
+  const visibleLayersRef = useRef(visibleLayers);
   const selectedBuildingIdRef = useRef(selectedBuildingId);
   const selectedPlaceIdRef = useRef(selectedPlaceId);
   callbacksRef.current = { onSelectBuilding, onSelectPlace };
-  themeRef.current = theme;
-  showPlacesRef.current = showPlaces;
-  showAlleysRef.current = showAlleys;
+  visibleLayersRef.current = visibleLayers;
   selectedBuildingIdRef.current = selectedBuildingId;
   selectedPlaceIdRef.current = selectedPlaceId;
 
@@ -208,7 +216,7 @@ export default function MapView({
           type: "raster",
           source: "gsi",
           paint: {
-            "raster-opacity": 0.34,
+            "raster-opacity": 0.14,
             "raster-saturation": -0.85,
             "raster-contrast": -0.18,
             "raster-brightness-min": 0.2,
@@ -247,9 +255,26 @@ export default function MapView({
         source: "buildings",
         minzoom: 14.3,
         paint: {
-          "fill-color": USE_COLOR,
+          "fill-color": "#d9d4c8",
           "fill-opacity": ["interpolate", ["linear"], ["zoom"], 14.3, 0.6, 17, 0.78, 20, 0.88],
         },
+      });
+      map.addLayer({
+        id: "buildings-category",
+        type: "fill",
+        source: "buildings",
+        minzoom: 14.3,
+        filter: categoryFilter("primaryUse", visibleLayersRef.current),
+        paint: { "fill-color": USE_COLOR, "fill-opacity": 0.82 },
+      });
+      map.addLayer({
+        id: "buildings-era",
+        type: "fill",
+        source: "buildings",
+        minzoom: 14.3,
+        filter: ["all", ["==", ["get", "hasBookstore"], true], ["!=", ["get", "bookstoreEra"], "unknown"]],
+        layout: { visibility: "none" },
+        paint: { "fill-color": ERA_COLOR, "fill-opacity": 0.9 },
       });
       map.addLayer({
         id: "buildings-outline",
@@ -261,6 +286,13 @@ export default function MapView({
           "line-opacity": ["interpolate", ["linear"], ["zoom"], 14.3, 0.25, 18, 0.58],
           "line-width": ["interpolate", ["linear"], ["zoom"], 14.3, 0.35, 19, 1.1],
         },
+      });
+      map.addLayer({
+        id: "building-hit",
+        type: "fill",
+        source: "buildings",
+        minzoom: 14.3,
+        paint: { "fill-color": "#000000", "fill-opacity": 0 },
       });
       map.addLayer({
         id: "building-hover",
@@ -332,6 +364,7 @@ export default function MapView({
           const element = document.createElement("button");
           element.type = "button";
           element.className = "curated-map-label";
+          element.dataset.category = feature.properties.category;
           element.textContent = feature.properties.name;
           element.setAttribute("aria-label", `${feature.properties.name}を選択`);
           element.addEventListener("click", (event) => {
@@ -345,33 +378,25 @@ export default function MapView({
           curatedMarkers.push(marker);
         });
 
-      const syncCuratedLabelVisibility = () => {
-        const visible = showPlacesRef.current && map.getZoom() >= 17.2;
-        curatedMarkers.forEach((marker) => {
-          marker.getElement().hidden = !visible;
-        });
-      };
-      syncCuratedLabelVisibility();
-      map.on("zoom", syncCuratedLabelVisibility);
+      map.on("zoom", () => syncCuratedLabels(map, visibleLayersRef.current));
 
       // Apply any UI changes made while the asynchronous style was loading.
-      syncThemeLayers(map, themeRef.current, showAlleysRef.current);
-      syncPlaceVisibility(map, showPlacesRef.current);
+      syncLayers(map, visibleLayersRef.current);
       syncBuildingSelection(map, selectedBuildingIdRef.current);
       syncPlaceSelection(map, selectedPlaceIdRef.current);
 
       map.on("mousemove", (event) => {
-        const hit = map.queryRenderedFeatures(event.point, { layers: ["places-points", "buildings-fill"] });
-        const building = hit.find((feature) => feature.layer.id === "buildings-fill");
+        const hit = map.queryRenderedFeatures(event.point, { layers: ["places-points", "building-hit"] });
+        const building = hit.find((feature) => feature.layer.id === "building-hit");
         map.getCanvas().style.cursor = hit.length ? "pointer" : "grab";
         map.setFilter("building-hover", ["==", ["get", "id"], getFeatureId(building) ?? ""]);
       });
-      map.on("mouseleave", "buildings-fill", () => {
+      map.on("mouseleave", "building-hit", () => {
         map.getCanvas().style.cursor = "";
         map.setFilter("building-hover", ["==", ["get", "id"], ""]);
       });
       map.on("click", (event: MapMouseEvent) => {
-        const hit = map.queryRenderedFeatures(event.point, { layers: ["places-points", "buildings-fill"] });
+        const hit = map.queryRenderedFeatures(event.point, { layers: ["places-points", "building-hit"] });
         const place = hit.find((feature) => feature.layer.id === "places-points");
         if (place) {
           callbacksRef.current.onSelectPlace(getFeatureId(place));
@@ -379,7 +404,7 @@ export default function MapView({
           callbacksRef.current.onSelectBuilding(buildingId || undefined);
           return;
         }
-        const building = hit.find((feature) => feature.layer.id === "buildings-fill");
+        const building = hit.find((feature) => feature.layer.id === "building-hit");
         callbacksRef.current.onSelectPlace(undefined);
         callbacksRef.current.onSelectBuilding(getFeatureId(building));
       });
@@ -395,14 +420,8 @@ export default function MapView({
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    syncThemeLayers(map, theme, showAlleys);
-  }, [theme, showAlleys]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    syncPlaceVisibility(map, showPlaces);
-  }, [showPlaces]);
+    syncLayers(map, visibleLayers);
+  }, [visibleLayers]);
 
   useEffect(() => {
     const map = mapRef.current;
