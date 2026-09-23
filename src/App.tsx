@@ -25,7 +25,7 @@ const initialLayers: Record<LayerKey, boolean> = {
   bookstore: true,
   cafe: true,
   restaurant: true,
-  other: false,
+  other: true,
   bookEra: false,
   alleys: false,
 };
@@ -54,7 +54,6 @@ function MapLegend({
   }
   if (visibleLayers.alleys) items.push({ label: "路地・細街路", color: "#495753", line: true });
   if (!items.length && !visibleLayers.bookEra) return null;
-  const hasPlaces = visibleLayers.antiquarian_bookstore || visibleLayers.bookstore || visibleLayers.cafe || visibleLayers.restaurant || visibleLayers.other;
 
   return (
     <aside className={`map-legend ${open ? "is-open" : ""}`} aria-label="凡例">
@@ -88,13 +87,7 @@ function MapLegend({
               </div>
             </div>
           )}
-          {hasPlaces && (
-            <div className="map-legend-point-key">
-              <span className="map-legend-point" aria-hidden="true" />
-              <span>店の位置（拡大すると表示）</span>
-            </div>
-          )}
-          <p className="map-legend-note">色の面は建物の代表用途。</p>
+          <p className="map-legend-note">色の面は建物の代表用途。建物を押すと店を確認できます。</p>
         </div>
       )}
     </aside>
@@ -209,7 +202,7 @@ function AboutPanel({ data, onClose }: { data: AtlasData; onClose: () => void })
         <button className="icon-button" type="button" onClick={onClose} aria-label="説明を閉じる">×</button>
       </div>
       <div className="about-body">
-        <p className="lead">神田神保町一〜三丁目の建物と店舗を表示しています。左の一覧で見たいレイヤーを選び、地図上の店を押すと詳細が開きます。</p>
+        <p className="lead">神田神保町一〜三丁目の建物と店舗を表示しています。左の一覧で見たいレイヤーを選び、建物を押すと店の詳細が開きます。</p>
         <h3>データの注意点</h3>
         <ul>{data.summary.caveats.map((item) => <li key={item}>{item}</li>)}</ul>
         <div className="source-box">
@@ -374,7 +367,7 @@ export default function App() {
                 </label>
               ))}
             </div>
-            <p className="layer-note">数字は件数（店は店舗数）。色の面は建物の代表用途。拡大すると、白縁の丸で店の位置が出ます。</p>
+            <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。建物を押すと、入っている店が見られます。</p>
             {visibleLayers.bookEra && <p className="layer-note">創業年代は色が濃いほど古い店です。確認できた店のみ表示します。</p>}
           </section>
         </aside>
@@ -384,10 +377,8 @@ export default function App() {
             data={data}
             visibleLayers={visibleLayers}
             selectedBuildingId={selectedBuildingId}
-            selectedPlaceId={selectedPlaceId}
             focusPlaceId={focusPlaceId}
-            onSelectBuilding={(id) => { setSelectedBuildingId(id); if (id) setLegendOpen(false); else setSelectedPlaceId(undefined); }}
-            onSelectPlace={selectPlace}
+            onSelectBuilding={(id) => { setSelectedPlaceId(undefined); setSelectedBuildingId(id); if (id) setLegendOpen(false); }}
           />
           <MapLegend visibleLayers={visibleLayers} open={legendOpen} onToggle={() => setLegendOpen((value) => !value)} />
           <DetailPanel

@@ -7,7 +7,7 @@ import type {
   MapMouseEvent,
   MapGeoJSONFeature,
 } from "maplibre-gl";
-import type { AtlasData, LayerKey, PlaceCategory } from "./types";
+import type { AtlasData, LayerKey } from "./types";
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -15,10 +15,8 @@ type Props = {
   data: AtlasData;
   visibleLayers: Record<LayerKey, boolean>;
   selectedBuildingId?: string;
-  selectedPlaceId?: string;
   focusPlaceId?: string;
   onSelectBuilding: (id?: string) => void;
-  onSelectPlace: (id?: string) => void;
 };
 
 const USE_COLOR: ExpressionSpecification = [
@@ -66,34 +64,15 @@ function getFeatureId(feature: MapGeoJSONFeature | undefined) {
   return String(feature?.properties?.id ?? "") || undefined;
 }
 
-function categoryLayer(category: PlaceCategory): LayerKey {
-  switch (category) {
-    case "antiquarian_bookstore":
-    case "bookstore":
-    case "cafe":
-    case "restaurant":
-      return category;
-    default:
-      return "other";
-  }
-}
-
-function categoryFilter(property: "primaryUse" | "category", visibleLayers: Record<LayerKey, boolean>): ExpressionSpecification {
+function categoryFilter(visibleLayers: Record<LayerKey, boolean>): ExpressionSpecification {
   const categories = (["antiquarian_bookstore", "bookstore", "cafe", "restaurant"] as const)
     .filter((category) => visibleLayers[category]);
   const enabled = visibleLayers.other
     ? [...categories, "retail", "culture", "education", "service", "other"]
     : categories;
   return enabled.length
-    ? ["in", ["get", property], ["literal", enabled]]
-    : ["==", ["get", property], "__none__"];
-}
-
-function syncCuratedLabels(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) {
-  const zoomedIn = map.getZoom() >= 17.2;
-  map.getContainer().querySelectorAll<HTMLElement>(".curated-map-label").forEach((element) => {
-    element.hidden = !zoomedIn || !visibleLayers[categoryLayer(element.dataset.category as PlaceCategory)];
-  });
+    ? ["in", ["get", "primaryUse"], ["literal", enabled]]
+    : ["==", ["get", "primaryUse"], "__none__"];
 }
 
 function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) {
@@ -101,19 +80,21 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) 
   const baseVisibility = visibleLayers.buildings ? "visible" : "none";
   map.setLayoutProperty("buildings-fill", "visibility", baseVisibility);
   map.setLayoutProperty("buildings-outline", "visibility", baseVisibility);
-  const visibleCategories = categoryFilter("primaryUse", visibleLayers);
+  const visibleCategories = categoryFilter(visibleLayers);
   map.setFilter("buildings-category", visibleCategories);
   map.setLayoutProperty("buildings-era", "visibility", visibleLayers.bookEra ? "visible" : "none");
   const eraBuildings: ExpressionSpecification = ["all", ["==", ["get", "hasBookstore"], true], ["!=", ["get", "bookstoreEra"], "unknown"]];
   map.setFilter(
     "building-hit",
-    visibleLayers.buildings ? null : visibleLayers.bookEra ? ["any", visibleCategories, eraBuildings] : visibleCategories,
+    visibleLayers.buildings
+      ? [">", ["get", "placeCount"], 0]
+      : visibleLayers.bookEra
+        ? ["any", visibleCategories, eraBuildings]
+        : visibleCategories,
   );
   const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
   map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
   map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
-  map.setFilter("places-points", categoryFilter("category", visibleLayers));
-  syncCuratedLabels(map, visibleLayers);
 }
 
 function syncBuildingSelection(map: MapLibreMap, selectedBuildingId?: string) {
@@ -123,41 +104,21 @@ function syncBuildingSelection(map: MapLibreMap, selectedBuildingId?: string) {
   map.setFilter("building-selected-core", filter);
 }
 
-function syncPlaceSelection(map: MapLibreMap, selectedPlaceId?: string) {
-  if (!map.getLayer("places-points")) return;
-  map.setPaintProperty("places-points", "circle-color", [
-    "case",
-    ["==", ["get", "id"], selectedPlaceId ?? ""],
-    "#a6533c",
-    "#263a35",
-  ]);
-  map.setPaintProperty("places-points", "circle-stroke-width", [
-    "case",
-    ["==", ["get", "id"], selectedPlaceId ?? ""],
-    3,
-    ["interpolate", ["linear"], ["zoom"], 17.2, 2, 18.3, 2.4],
-  ]);
-}
-
 export default function MapView({
   data,
   visibleLayers,
   selectedBuildingId,
-  selectedPlaceId,
   focusPlaceId,
   onSelectBuilding,
-  onSelectPlace,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap>();
-  const callbacksRef = useRef({ onSelectBuilding, onSelectPlace });
+  const callbacksRef = useRef({ onSelectBuilding });
   const visibleLayersRef = useRef(visibleLayers);
   const selectedBuildingIdRef = useRef(selectedBuildingId);
-  const selectedPlaceIdRef = useRef(selectedPlaceId);
-  callbacksRef.current = { onSelectBuilding, onSelectPlace };
+  callbacksRef.current = { onSelectBuilding };
   visibleLayersRef.current = visibleLayers;
   selectedBuildingIdRef.current = selectedBuildingId;
-  selectedPlaceIdRef.current = selectedPlaceId;
 
   const placeById = useMemo(
     () => new Map(data.places.features.map((feature) => [feature.properties.id, feature])),
@@ -203,8 +164,6 @@ export default function MapView({
       },
     });
 
-    const curatedMarkers: maplibregl.Marker[] = [];
-
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
     map.addControl(
@@ -218,7 +177,6 @@ export default function MapView({
     map.on("load", () => {
       map.addSource("boundary", { type: "geojson", data: data.boundary });
       map.addSource("buildings", { type: "geojson", data: data.buildings, promoteId: "id" });
-      map.addSource("places", { type: "geojson", data: data.places, promoteId: "id" });
       map.addSource("alleys", { type: "geojson", data: data.alleys });
 
       map.addLayer({
@@ -242,7 +200,7 @@ export default function MapView({
         type: "fill",
         source: "buildings",
         minzoom: 14.3,
-        filter: categoryFilter("primaryUse", visibleLayersRef.current),
+        filter: categoryFilter(visibleLayersRef.current),
         paint: { "fill-color": USE_COLOR, "fill-opacity": 0.82 },
       });
       map.addLayer({
@@ -317,56 +275,19 @@ export default function MapView({
         },
       });
       map.addLayer({
-        id: "places-points",
-        type: "circle",
-        source: "places",
-        minzoom: 17.2,
-        paint: {
-          "circle-radius": ["interpolate", ["linear"], ["zoom"], 17.2, 4, 18.3, 5.4],
-          "circle-color": "#263a35",
-          "circle-stroke-color": "#fffdf7",
-          "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 17.2, 2, 18.3, 2.4],
-          "circle-opacity": 1,
-        },
-      });
-      map.addLayer({
         id: "boundary-line",
         type: "line",
         source: "boundary",
         paint: { "line-color": "#97452f", "line-width": 1.3, "line-opacity": 0.7, "line-dasharray": [4, 2] },
       });
 
-      data.places.features
-        .filter((feature) => feature.properties.confidence === "confirmed")
-        .forEach((feature) => {
-          const element = document.createElement("button");
-          element.type = "button";
-          element.className = "curated-map-label";
-          element.dataset.category = feature.properties.category;
-          element.textContent = feature.properties.name;
-          element.setAttribute("aria-label", `${feature.properties.name}を選択`);
-          element.addEventListener("click", (event) => {
-            event.stopPropagation();
-            callbacksRef.current.onSelectPlace(feature.properties.id);
-            callbacksRef.current.onSelectBuilding(feature.properties.buildingId);
-          });
-          const marker = new maplibregl.Marker({ element, anchor: "left", offset: [7, 0] })
-            .setLngLat(feature.geometry.coordinates as [number, number])
-            .addTo(map);
-          curatedMarkers.push(marker);
-        });
-
-      map.on("zoom", () => syncCuratedLabels(map, visibleLayersRef.current));
-
       // Apply any UI changes made while the asynchronous style was loading.
       syncLayers(map, visibleLayersRef.current);
       syncBuildingSelection(map, selectedBuildingIdRef.current);
-      syncPlaceSelection(map, selectedPlaceIdRef.current);
 
       map.on("mousemove", (event) => {
-        const hit = map.queryRenderedFeatures(event.point, { layers: ["places-points", "building-hit"] });
-        const building = hit.find((feature) => feature.layer.id === "building-hit");
-        map.getCanvas().style.cursor = hit.length ? "pointer" : "grab";
+        const building = map.queryRenderedFeatures(event.point, { layers: ["building-hit"] })[0];
+        map.getCanvas().style.cursor = building ? "pointer" : "grab";
         map.setFilter("building-hover", ["==", ["get", "id"], getFeatureId(building) ?? ""]);
       });
       map.on("mouseleave", "building-hit", () => {
@@ -374,22 +295,12 @@ export default function MapView({
         map.setFilter("building-hover", ["==", ["get", "id"], ""]);
       });
       map.on("click", (event: MapMouseEvent) => {
-        const hit = map.queryRenderedFeatures(event.point, { layers: ["places-points", "building-hit"] });
-        const place = hit.find((feature) => feature.layer.id === "places-points");
-        if (place) {
-          callbacksRef.current.onSelectPlace(getFeatureId(place));
-          const buildingId = String(place.properties?.buildingId ?? "");
-          callbacksRef.current.onSelectBuilding(buildingId || undefined);
-          return;
-        }
-        const building = hit.find((feature) => feature.layer.id === "building-hit");
-        callbacksRef.current.onSelectPlace(undefined);
+        const building = map.queryRenderedFeatures(event.point, { layers: ["building-hit"] })[0];
         callbacksRef.current.onSelectBuilding(getFeatureId(building));
       });
     });
 
     return () => {
-      curatedMarkers.forEach((marker) => marker.remove());
       map.remove();
       mapRef.current = undefined;
     };
@@ -415,11 +326,5 @@ export default function MapView({
     map.flyTo({ center: feature.geometry.coordinates as [number, number], zoom: 18.25, duration: 900, essential: true });
   }, [focusPlaceId, placeById]);
 
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    syncPlaceSelection(map, selectedPlaceId);
-  }, [selectedPlaceId]);
-
-  return <div ref={containerRef} className="map-canvas" aria-label="神保町の建物と店舗の地図" />;
+  return <div ref={containerRef} className="map-canvas" aria-label="神保町の建物を選んで店舗を調べる地図" />;
 }
