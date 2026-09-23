@@ -1267,3 +1267,136 @@ a:focus-visible {
     bottom: 4px;
   }
 }
+
+/* Keep the atlas frame familiar while the controls stay a simple layer list. */
+:root {
+  --paper: #f2f0e9;
+  --panel: #fffdf8;
+  --line: #d8d4c8;
+}
+
+.workspace {
+  grid-template-columns: 286px minmax(0, 1fr);
+}
+
+.sidebar {
+  background: rgb(255 253 248 / 96%);
+}
+
+.map-legend {
+  position: absolute;
+  z-index: 12;
+  bottom: 25px;
+  left: 14px;
+  width: 78px;
+  max-height: calc(100% - 72px);
+  overflow: hidden;
+  border: 1px solid rgb(216 212 200 / 92%);
+  border-radius: 10px;
+  background: var(--panel);
+  box-shadow: 0 10px 30px rgb(25 35 31 / 13%);
+  transition: width 160ms ease;
+}
+
+.map-legend.is-open {
+  width: 210px;
+}
+
+.map-legend-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.map-legend-body {
+  max-height: calc(100svh - 245px);
+  padding: 0 11px 11px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.map-legend-list {
+  display: grid;
+  gap: 6px;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 17px;
+  color: #4e5854;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.map-legend-swatch {
+  flex: none;
+  width: 19px;
+  height: 8px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 2px;
+}
+
+.map-legend-swatch.is-line {
+  height: 0;
+  border: 0;
+  border-top: 2px dashed;
+  border-radius: 0;
+}
+
+.map-legend-era {
+  margin-top: 11px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.map-legend-era h2 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.map-legend-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 960px) {
+  .workspace {
+    display: block;
+  }
+
+  .map-legend {
+    bottom: 13px;
+    left: 10px;
+    width: 72px;
+    max-height: 45vh;
+  }
+
+  .map-legend.is-open {
+    width: 184px;
+  }
+
+  .map-legend-body {
+    max-height: calc(45vh - 38px);
+    padding-inline: 9px;
+  }
+
+  .detail-panel {
+    top: 12px;
+    bottom: auto;
+    max-height: min(45vh, calc(100% - 24px));
+  }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import MapView from "./MapView";
 import { loadAtlasData } from "./data";
-import { categoryLabel } from "./palette";
+import { categoryLabel, eraLegend } from "./palette";
 import type { AtlasData, BuildingFeature, LayerKey, PlaceFeature } from "./types";
 
 function normalize(value: string) {
@@ -29,6 +29,70 @@ const initialLayers: Record<LayerKey, boolean> = {
   bookEra: false,
   alleys: false,
 };
+
+function MapLegend({
+  visibleLayers,
+  open,
+  onToggle,
+}: {
+  visibleLayers: Record<LayerKey, boolean>;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const items: { label: string; color: string; line?: boolean }[] = [];
+  if (visibleLayers.buildings) items.push({ label: "建物", color: "#d9d4c8" });
+  if (visibleLayers.antiquarian_bookstore) items.push({ label: "古書店", color: "#a6533c" });
+  if (visibleLayers.bookstore) items.push({ label: "新刊・専門書店", color: "#d98a4e" });
+  if (visibleLayers.cafe) items.push({ label: "喫茶・カフェ", color: "#4f7f78" });
+  if (visibleLayers.restaurant) items.push({ label: "飲食店", color: "#7f6b9f" });
+  if (visibleLayers.other) {
+    items.push(
+      { label: "物販・サービス", color: "#7389a6" },
+      { label: "文化・教育", color: "#b29a45" },
+      { label: "その他", color: "#d9d4c8" },
+    );
+  }
+  if (visibleLayers.alleys) items.push({ label: "路地・細街路", color: "#495753", line: true });
+  if (!items.length && !visibleLayers.bookEra) return null;
+
+  return (
+    <aside className={`map-legend ${open ? "is-open" : ""}`} aria-label="凡例">
+      <button className="map-legend-toggle" type="button" onClick={onToggle} aria-expanded={open}>
+        <span>凡例</span><span aria-hidden="true">{open ? "−" : "+"}</span>
+      </button>
+      {open && (
+        <div className="map-legend-body">
+          <div className="map-legend-list">
+            {items.map((item) => (
+              <div className="map-legend-item" key={item.label}>
+                <span
+                  className={item.line ? "map-legend-swatch is-line" : "map-legend-swatch"}
+                  style={item.line ? { borderColor: item.color } : { backgroundColor: item.color }}
+                  aria-hidden="true"
+                />
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+          {visibleLayers.bookEra && (
+            <div className="map-legend-era">
+              <h2>書店の創業年代</h2>
+              <div className="map-legend-list">
+                {eraLegend.filter(([key]) => key !== "unknown").map(([key, label, color]) => (
+                  <div className="map-legend-item" key={key}>
+                    <span className="map-legend-swatch" style={{ backgroundColor: color }} aria-hidden="true" />
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <p className="map-legend-note">建物色は代表用途、点は店の位置。</p>
+        </div>
+      )}
+    </aside>
+  );
+}
 
 function PlaceCard({ place, isSelected, onSelect }: { place: PlaceFeature; isSelected: boolean; onSelect: () => void }) {
   const p = place.properties;
@@ -166,6 +230,7 @@ export default function App() {
   const [data, setData] = useState<AtlasData>();
   const [error, setError] = useState<string>();
   const [visibleLayers, setVisibleLayers] = useState<Record<LayerKey, boolean>>(initialLayers);
+  const [legendOpen, setLegendOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedBuildingId, setSelectedBuildingId] = useState<string>();
   const [selectedPlaceId, setSelectedPlaceId] = useState<string>();
@@ -207,6 +272,7 @@ export default function App() {
   const selectPlace = (id?: string) => {
     setSelectedPlaceId(id);
     if (!id) return;
+    setLegendOpen(false);
     const place = placeById.get(id);
     if (place) {
       const layer = layerForCategory(place.properties.category);
@@ -254,7 +320,7 @@ export default function App() {
           <span className="brand-jp">店と建物</span>
         </div>
         <div className="topbar-actions">
-          <button type="button" className="text-button" onClick={() => setAboutOpen(true)}>データについて</button>
+          <button type="button" className="text-button" onClick={() => { setLegendOpen(false); setAboutOpen(true); }}>データについて</button>
           <button type="button" className="mobile-menu" onClick={() => setSidebarOpen(true)} aria-label="レイヤーを開く">レイヤー</button>
         </div>
       </header>
@@ -313,9 +379,10 @@ export default function App() {
             selectedBuildingId={selectedBuildingId}
             selectedPlaceId={selectedPlaceId}
             focusPlaceId={focusPlaceId}
-            onSelectBuilding={(id) => { setSelectedBuildingId(id); if (!id) setSelectedPlaceId(undefined); }}
+            onSelectBuilding={(id) => { setSelectedBuildingId(id); if (id) setLegendOpen(false); else setSelectedPlaceId(undefined); }}
             onSelectPlace={selectPlace}
           />
+          <MapLegend visibleLayers={visibleLayers} open={legendOpen} onToggle={() => setLegendOpen((value) => !value)} />
           <DetailPanel
             building={selectedBuilding}
             places={buildingPlaces}
