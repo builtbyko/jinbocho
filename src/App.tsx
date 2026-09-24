@@ -39,8 +39,11 @@ function MapLegend({
   open: boolean;
   onToggle: () => void;
 }) {
-  const items: { label: string; color: string; line?: boolean }[] = [];
-  if (visibleLayers.buildings) items.push({ label: "建物", color: "#d9d4c8" });
+  const items: { label: string; color: string; line?: boolean }[] = [
+    { label: "道路", color: "#e9ebe8" },
+    { label: "歩道（登録部分）", color: "#fbfaf7" },
+  ];
+  if (visibleLayers.buildings) items.push({ label: "建物", color: "#dadbd6" });
   if (visibleLayers.antiquarian_bookstore) items.push({ label: "古書店", color: "#a6533c" });
   if (visibleLayers.bookstore) items.push({ label: "新刊・専門書店", color: "#d98a4e" });
   if (visibleLayers.cafe) items.push({ label: "喫茶・カフェ", color: "#4f7f78" });
@@ -49,7 +52,7 @@ function MapLegend({
     items.push(
       { label: "物販・サービス", color: "#7389a6" },
       { label: "文化・教育", color: "#b29a45" },
-      { label: "その他", color: "#d9d4c8" },
+      { label: "その他", color: "#dadbd6" },
     );
   }
   if (visibleLayers.alleys) items.push({ label: "路地・細街路", color: "#495753", line: true });
@@ -219,8 +222,12 @@ function AboutPanel({ data, onClose }: { data: AtlasData; onClose: () => void })
           <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
             店舗・路地 · OpenStreetMap（{data.summary.osmObservedAt}観測）↗
           </a>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+            道路・歩道・通り名 · OpenStreetMap ↗
+          </a>
           <a href="https://geoshape.ex.nii.ac.jp/ka/" target="_blank" rel="noreferrer">町丁目境界 · CODH ↗</a>
         </div>
+        <p>道路幅と歩道の形は概略です。歩道はOSMに歩道として登録された範囲を表示しています。</p>
       </div>
     </aside>
   );

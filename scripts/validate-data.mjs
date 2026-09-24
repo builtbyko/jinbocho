@@ -13,18 +13,30 @@ function assert(condition, message) {
 }
 
 const boundary = read("public/data/boundary.geojson");
+const basemapRoads = read("public/data/basemap-roads.geojson");
+const basemapSidewalks = read("public/data/basemap-sidewalks.geojson");
+const basemapRoadNames = read("public/data/basemap-road-names.geojson");
 const buildings = read("public/data/buildings.geojson");
 const places = read("public/data/places.geojson");
 const alleys = read("public/data/alleys.geojson");
 const summary = read("public/data/summary.json");
 const curated = read("data/curated/places.json");
 
-for (const [name, collection] of Object.entries({ boundary, buildings, places, alleys })) {
+for (const [name, collection] of Object.entries({ boundary, basemapRoads, basemapSidewalks, basemapRoadNames, buildings, places, alleys })) {
   assert(collection.type === "FeatureCollection", `${name} must be a FeatureCollection`);
   assert(Array.isArray(collection.features), `${name}.features must be an array`);
 }
 
 assert(boundary.features.length === 3, "boundary must contain the three 神田神保町 towns");
+assert(basemapRoads.features.length > 0, "white basemap roads are missing");
+assert(basemapSidewalks.features.length > 0, "mapped sidewalks are missing");
+assert(
+  ["靖国通り", "白山通り"].every((name) => basemapRoadNames.features.some((feature) => feature.properties?.name === name)),
+  "main street labels are missing",
+);
+for (const [name, collection] of Object.entries({ basemapRoads, basemapSidewalks, basemapRoadNames })) {
+  assert(collection.metadata?.source?.includes("OpenStreetMap"), `${name} lacks OSM attribution`);
+}
 assert(buildings.features.length > 100, "building coverage is unexpectedly small");
 assert(places.features.length >= curated.places.length, "curated places are missing from public data");
 assert(alleys.features.length > 10, "alley coverage is unexpectedly small");

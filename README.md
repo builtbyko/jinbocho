@@ -7,6 +7,7 @@
 ## いま見られるもの
 
 - 東京都「令和3年度区部土地利用現況調査」の建物ポリゴンを、神田神保町一〜三丁目へ切り出して表示
+- OpenStreetMapの道路線と登録済みの歩道から作った白地図に、主要な通り名と丁目名を表示
 - 建物を「古書・新刊書店／喫茶・カフェ／飲食／物販・サービス／文化・学び」で色分け
 - 古書店を創業年代（戦前、1945〜1969年、1970〜1999年、2000年以降、不明）で比較
 - 路地・歩行者道・細街路を建物の上に重ねて表示
@@ -40,12 +41,14 @@ OpenStreetMapからデータを再取得する場合:
 
 ```bash
 python scripts/build_jinbocho_data.py --fetch
+python scripts/build_basemap.py --fetch
 ```
 
-取得済みの `data/raw/osm-jinbocho.json` から再生成する場合:
+取得済みの `data/raw/osm-jinbocho.json` と `data/raw/osm-basemap.xml.gz` から再生成する場合:
 
 ```bash
 python scripts/build_jinbocho_data.py
+python scripts/build_basemap.py
 ```
 
 東京都の建物現況Shapefileを指定して再生成する場合:

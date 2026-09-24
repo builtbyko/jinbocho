@@ -86,6 +86,9 @@ export type SummaryData = {
 
 export type AtlasData = {
   boundary: FeatureCollection<Geometry>;
+  basemapRoads: FeatureCollection<Geometry>;
+  basemapSidewalks: FeatureCollection<Geometry>;
+  basemapRoadNames: FeatureCollection<Geometry>;
   buildings: FeatureCollection<Polygon | MultiPolygon, BuildingProperties>;
   places: FeatureCollection<Point, PlaceProperties>;
   alleys: FeatureCollection<Geometry>;

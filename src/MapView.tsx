@@ -132,7 +132,7 @@ export default function MapView({
       container: containerRef.current,
       center: [139.7572, 35.69625],
       zoom: 16.35,
-      minZoom: 14.3,
+      minZoom: 15,
       maxZoom: 20,
       maxBounds: [
         [139.747, 35.689],
@@ -141,25 +141,11 @@ export default function MapView({
       attributionControl: false,
       style: {
         version: 8,
-        sources: {
-          gsi: {
-            type: "raster",
-            tiles: ["https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"],
-            tileSize: 256,
-            maxzoom: 18,
-            attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noreferrer">国土地理院</a>',
-          },
-        },
+        sources: {},
         layers: [{
-          id: "gsi",
-          type: "raster",
-          source: "gsi",
-          paint: {
-            "raster-opacity": 0.14,
-            "raster-saturation": -0.85,
-            "raster-contrast": -0.18,
-            "raster-brightness-min": 0.2,
-          },
+          id: "paper",
+          type: "background",
+          paint: { "background-color": "#f1f0ec" },
         }],
       },
     });
@@ -176,6 +162,9 @@ export default function MapView({
 
     map.on("load", () => {
       map.addSource("boundary", { type: "geojson", data: data.boundary });
+      map.addSource("basemap-roads", { type: "geojson", data: data.basemapRoads });
+      map.addSource("basemap-sidewalks", { type: "geojson", data: data.basemapSidewalks });
+      map.addSource("basemap-road-names", { type: "geojson", data: data.basemapRoadNames });
       map.addSource("buildings", { type: "geojson", data: data.buildings, promoteId: "id" });
       map.addSource("alleys", { type: "geojson", data: data.alleys });
 
@@ -183,7 +172,31 @@ export default function MapView({
         id: "scope-mask",
         type: "fill",
         source: "boundary",
-        paint: { "fill-color": "#f5f1e8", "fill-opacity": 0.06 },
+        paint: { "fill-color": "#faf9f5", "fill-opacity": 1 },
+      });
+      map.addLayer({
+        id: "road-surface",
+        type: "fill",
+        source: "basemap-roads",
+        paint: { "fill-color": "#e9ebe8", "fill-opacity": 1 },
+      });
+      map.addLayer({
+        id: "road-edge",
+        type: "line",
+        source: "basemap-roads",
+        paint: { "line-color": "#cfd3cf", "line-width": ["interpolate", ["linear"], ["zoom"], 15, 0.4, 19, 0.9], "line-opacity": 0.85 },
+      });
+      map.addLayer({
+        id: "mapped-sidewalk",
+        type: "fill",
+        source: "basemap-sidewalks",
+        paint: { "fill-color": "#fbfaf7", "fill-opacity": 1 },
+      });
+      map.addLayer({
+        id: "mapped-sidewalk-edge",
+        type: "line",
+        source: "basemap-sidewalks",
+        paint: { "line-color": "#d8dbd6", "line-width": 0.55, "line-opacity": 0.8 },
       });
       map.addLayer({
         id: "buildings-fill",
@@ -191,8 +204,8 @@ export default function MapView({
         source: "buildings",
         minzoom: 14.3,
         paint: {
-          "fill-color": "#d9d4c8",
-          "fill-opacity": ["interpolate", ["linear"], ["zoom"], 14.3, 0.6, 17, 0.78, 20, 0.88],
+          "fill-color": "#dadbd6",
+          "fill-opacity": 0.96,
         },
       });
       map.addLayer({
@@ -218,8 +231,8 @@ export default function MapView({
         source: "buildings",
         minzoom: 14.3,
         paint: {
-          "line-color": "#625e55",
-          "line-opacity": ["interpolate", ["linear"], ["zoom"], 14.3, 0.25, 18, 0.58],
+          "line-color": "#717a73",
+          "line-opacity": ["interpolate", ["linear"], ["zoom"], 15, 0.3, 18, 0.58],
           "line-width": ["interpolate", ["linear"], ["zoom"], 14.3, 0.35, 19, 1.1],
         },
       });
@@ -278,7 +291,43 @@ export default function MapView({
         id: "boundary-line",
         type: "line",
         source: "boundary",
-        paint: { "line-color": "#97452f", "line-width": 1.3, "line-opacity": 0.7, "line-dasharray": [4, 2] },
+        paint: { "line-color": "#a9aea9", "line-width": 0.9, "line-opacity": 0.65, "line-dasharray": [3, 3] },
+      });
+      map.addLayer({
+        id: "road-names",
+        type: "symbol",
+        source: "basemap-road-names",
+        minzoom: 15,
+        layout: {
+          "symbol-placement": "line",
+          "symbol-spacing": 900,
+          "text-field": ["get", "name"],
+          "text-font": ["Noto Sans CJK JP", "Yu Gothic", "Meiryo", "sans-serif"],
+          "text-size": ["interpolate", ["linear"], ["zoom"], 15, 11, 18, 13],
+          "text-letter-spacing": 0.07,
+          "text-padding": 8,
+          "text-keep-upright": true,
+        },
+        paint: { "text-color": "#59665e", "text-halo-color": "#faf9f5", "text-halo-width": 1.5 },
+      });
+      map.addLayer({
+        id: "chome-names",
+        type: "symbol",
+        source: "boundary",
+        minzoom: 15,
+        layout: {
+          "text-field": ["match", ["get", "name"], "神田神保町一丁目", "一丁目", "神田神保町二丁目", "二丁目", "神田神保町三丁目", "三丁目", ""],
+          "text-font": ["Noto Sans CJK JP", "Yu Gothic", "Meiryo", "sans-serif"],
+          "text-size": ["interpolate", ["linear"], ["zoom"], 15, 16, 17, 14],
+          "text-letter-spacing": 0.12,
+          "text-padding": 14,
+        },
+        paint: {
+          "text-color": "#717b72",
+          "text-opacity": ["interpolate", ["linear"], ["zoom"], 15, 0.8, 17, 0.68, 18.5, 0],
+          "text-halo-color": "#faf9f5",
+          "text-halo-width": 1.2,
+        },
       });
 
       // Apply any UI changes made while the asynchronous style was loading.
