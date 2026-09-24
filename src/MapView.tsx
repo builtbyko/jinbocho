@@ -161,6 +161,19 @@ export default function MapView({
     );
 
     map.on("load", () => {
+      map.addSource("outside-context", {
+        type: "raster",
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        maxzoom: 18,
+        attribution: '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a>',
+      });
+      map.addLayer({
+        id: "outside-context",
+        type: "raster",
+        source: "outside-context",
+        paint: { "raster-opacity": 0.58, "raster-saturation": -0.72 },
+      });
       map.addSource("boundary", { type: "geojson", data: data.boundary });
       map.addSource("basemap-roads", { type: "geojson", data: data.basemapRoads });
       map.addSource("basemap-sidewalks", { type: "geojson", data: data.basemapSidewalks });

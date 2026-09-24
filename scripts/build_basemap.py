@@ -41,16 +41,6 @@ ROAD_WIDTHS = {
     "service": 3.5,
     "pedestrian": 4.5,
 }
-LABEL_NAMES = {
-    "靖国通り",
-    "白山通り",
-    "すずらん通り",
-    "専大通り",
-    "明大通り",
-    "神田警察通り",
-}
-
-
 def feature(geometry, properties: dict) -> dict:
     return {"type": "Feature", "properties": properties, "geometry": mapping(geometry)}
 
@@ -113,8 +103,7 @@ def main() -> None:
     boundary = json.loads(BOUNDARY.read_text(encoding="utf-8"))
     scope = unary_union([shape(item["geometry"]) for item in boundary["features"]])
     scope_m = transform(TO_METERS, scope)
-    # Keep a narrow strip for streets that run along a town edge.
-    clip_m = scope_m.buffer(8)
+    clip_m = scope_m
     root = ET.fromstring(load_or_fetch(scope, args.fetch))
     nodes = {
         node.attrib["id"]: (float(node.attrib["lon"]), float(node.attrib["lat"]))
@@ -147,7 +136,7 @@ def main() -> None:
         road_count += 1
         road_shapes.append(line.buffer(parse_width(tags, highway) / 2, cap_style=1, join_style=1))
         name = tags.get("name", "")
-        if name in LABEL_NAMES:
+        if name:
             label_lines[name].append(line)
 
     if not road_shapes:
@@ -170,14 +159,16 @@ def main() -> None:
 
     labels = []
     for name, parts in sorted(label_lines.items()):
-        merged = linemerge(unary_union(parts))
+        unioned = unary_union(parts)
+        merged = unioned if unioned.geom_type == "LineString" else linemerge(unioned)
         clipped = merged.intersection(clip_m)
         segments = [
             part for part in (clipped.geoms if hasattr(clipped, "geoms") else [clipped])
             if part.geom_type == "LineString" and part.length >= 60
         ]
         if segments:
-            labels.append(feature(transform(TO_WGS84, max(segments, key=lambda part: part.length)), {"name": name}))
+            display_name = "すずらん通り" if name == "神田すずらん通り" else name
+            labels.append(feature(transform(TO_WGS84, max(segments, key=lambda part: part.length)), {"name": display_name, "source_name": name}))
     write_geojson("basemap-road-names.geojson", labels, observed_at, "Street names from OSM highway tags.")
     print(f"Built {road_count} road ways, {sidewalk_count} mapped sidewalks, {len(labels)} named streets")
 

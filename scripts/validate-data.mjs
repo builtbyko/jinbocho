@@ -31,7 +31,7 @@ assert(boundary.features.length === 3, "boundary must contain the three 神田�
 assert(basemapRoads.features.length > 0, "white basemap roads are missing");
 assert(basemapSidewalks.features.length > 0, "mapped sidewalks are missing");
 assert(
-  ["靖国通り", "白山通り"].every((name) => basemapRoadNames.features.some((feature) => feature.properties?.name === name)),
+  ["靖国通り", "白山通り", "すずらん通り"].every((name) => basemapRoadNames.features.some((feature) => feature.properties?.name === name)),
   "main street labels are missing",
 );
 for (const [name, collection] of Object.entries({ basemapRoads, basemapSidewalks, basemapRoadNames })) {
