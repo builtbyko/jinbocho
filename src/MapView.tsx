@@ -6,8 +6,10 @@ import type {
   Map as MapLibreMap,
   MapMouseEvent,
   MapGeoJSONFeature,
+  GeoJSONSource,
 } from "maplibre-gl";
 import type { AtlasData, LayerKey } from "./types";
+import { buildingLabelData } from "./mapLabels";
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
@@ -75,7 +77,7 @@ function categoryFilter(visibleLayers: Record<LayerKey, boolean>): ExpressionSpe
     : ["==", ["get", "primaryUse"], "__none__"];
 }
 
-function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) {
+function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, data: AtlasData) {
   if (!map.getLayer("buildings-fill")) return;
   const baseVisibility = visibleLayers.buildings ? "visible" : "none";
   map.setLayoutProperty("buildings-fill", "visibility", baseVisibility);
@@ -95,6 +97,7 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>) 
   const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
   map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
   map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
+  (map.getSource("shop-names") as GeoJSONSource).setData(buildingLabelData(data, visibleLayers));
 }
 
 function syncBuildingSelection(map: MapLibreMap, selectedBuildingId?: string) {
@@ -180,6 +183,7 @@ export default function MapView({
       map.addSource("basemap-road-names", { type: "geojson", data: data.basemapRoadNames });
       map.addSource("buildings", { type: "geojson", data: data.buildings, promoteId: "id" });
       map.addSource("alleys", { type: "geojson", data: data.alleys });
+      map.addSource("shop-names", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
 
       map.addLayer({
         id: "scope-mask",
@@ -306,6 +310,35 @@ export default function MapView({
         source: "boundary",
         paint: { "line-color": "#a9aea9", "line-width": 0.9, "line-opacity": 0.65, "line-dasharray": [3, 3] },
       });
+      // Later symbol layers are placed first: confirmed shops precede general shops,
+      // while the street labels below retain priority over both.
+      for (const [id, confirmed, minzoom] of [
+        ["shop-names", false, 19.2],
+        ["shop-names-confirmed", true, 17.8],
+      ] as const) {
+        map.addLayer({
+          id,
+          type: "symbol",
+          source: "shop-names",
+          minzoom,
+          filter: ["==", ["get", "confirmed"], confirmed],
+          layout: {
+            "symbol-placement": "point",
+            "symbol-sort-key": ["get", "priority"],
+            "text-field": ["format", ["get", "name"], {}, ["get", "otherShops"], { "font-scale": 0.8 }],
+            "text-font": ["Noto Sans CJK JP", "Yu Gothic", "Meiryo", "sans-serif"],
+            "text-size": confirmed
+              ? ["interpolate", ["linear"], ["zoom"], 17.8, 12.5, 20, 15]
+              : ["interpolate", ["linear"], ["zoom"], 19.2, 11, 20, 13],
+            "text-max-width": 11,
+            "text-line-height": 1.25,
+            "text-padding": 7,
+            "text-allow-overlap": false,
+            "text-ignore-placement": false,
+          },
+          paint: { "text-color": "#26352f", "text-halo-color": "#fffefa", "text-halo-width": 1.4 },
+        });
+      }
       map.addLayer({
         id: "road-names",
         type: "symbol",
@@ -344,20 +377,20 @@ export default function MapView({
       });
 
       // Apply any UI changes made while the asynchronous style was loading.
-      syncLayers(map, visibleLayersRef.current);
+      syncLayers(map, visibleLayersRef.current, data);
       syncBuildingSelection(map, selectedBuildingIdRef.current);
 
       map.on("mousemove", (event) => {
-        const building = map.queryRenderedFeatures(event.point, { layers: ["building-hit"] })[0];
+        const building = map.queryRenderedFeatures(event.point, { layers: ["shop-names-confirmed", "shop-names", "building-hit"] })[0];
         map.getCanvas().style.cursor = building ? "pointer" : "grab";
         map.setFilter("building-hover", ["==", ["get", "id"], getFeatureId(building) ?? ""]);
       });
-      map.on("mouseleave", "building-hit", () => {
+      map.on("mouseout", () => {
         map.getCanvas().style.cursor = "";
         map.setFilter("building-hover", ["==", ["get", "id"], ""]);
       });
       map.on("click", (event: MapMouseEvent) => {
-        const building = map.queryRenderedFeatures(event.point, { layers: ["building-hit"] })[0];
+        const building = map.queryRenderedFeatures(event.point, { layers: ["shop-names-confirmed", "shop-names", "building-hit"] })[0];
         callbacksRef.current.onSelectBuilding(getFeatureId(building));
       });
     });
@@ -371,8 +404,8 @@ export default function MapView({
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    syncLayers(map, visibleLayers);
-  }, [visibleLayers]);
+    syncLayers(map, visibleLayers, data);
+  }, [visibleLayers, data]);
 
   useEffect(() => {
     const map = mapRef.current;

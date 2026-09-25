@@ -10,6 +10,7 @@
     "dev": "node --preserve-symlinks --preserve-symlinks-main node_modules/vite/bin/vite.js",
     "build": "node --preserve-symlinks --preserve-symlinks-main node_modules/typescript/bin/tsc -b && node --preserve-symlinks --preserve-symlinks-main node_modules/vite/bin/vite.js build",
     "preview": "node --preserve-symlinks --preserve-symlinks-main node_modules/vite/bin/vite.js preview",
+    "sync:curated": "node scripts/sync-curated-details.mjs",
     "validate:data": "node --preserve-symlinks --preserve-symlinks-main scripts/validate-data.mjs",
     "test": "npm run validate:data && npm run build"
   },

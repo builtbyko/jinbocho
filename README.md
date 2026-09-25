@@ -2,7 +2,7 @@
 
 神保町一〜三丁目を、建物・店・路地の粒度で読むための実験的な街のアトラスです。
 
-公開予定URL: <https://builtbyko.github.io/jinbocho/>
+公開URL: <https://builtbyko.github.io/jinbocho/>
 
 ## いま見られるもの
 
@@ -13,6 +13,7 @@
 - 古書店を創業年代（戦前、1945〜1969年、1970〜1999年、2000年以降、不明）で比較
 - 路地・歩行者道・細街路を建物の上に重ねて表示
 - 店名・専門分野・住所を横断検索し、建物内の複数店舗を詳細カードで確認
+- 拡大時に建物ごとの店名を表示し、13店の短い紹介を詳細カードと検索で確認
 - 情報ごとに出典、確認日、公式情報かOSM参考情報かを表示
 
 初版はデータ設計と読み方の検証版です。店舗の網羅性や営業状況を保証するものではありません。
@@ -50,6 +51,12 @@ python scripts/build_basemap.py --fetch
 ```bash
 python scripts/build_jinbocho_data.py
 python scripts/build_basemap.py
+```
+
+既存の建物・店舗位置を保って、確認済み店舗の紹介や出典だけを更新する場合:
+
+```bash
+npm run sync:curated
 ```
 
 東京都の建物現況Shapefileを指定して再生成する場合:

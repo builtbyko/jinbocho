@@ -109,6 +109,7 @@ function PlaceCard({ place, isSelected, onSelect }: { place: PlaceFeature; isSel
           {p.floor ? ` · ${p.floor}` : ""}
           {p.foundedYear ? ` · 創業${p.foundedYear}年` : ""}
         </small>
+        {p.description && <span className="place-card-description">{p.description}</span>}
       </span>
       <span aria-hidden="true">›</span>
     </button>
@@ -149,7 +150,9 @@ function DetailPanel({
               {activePlace.properties.confidence === "confirmed" ? "公式情報確認" : "OSM参考"}
             </span>
           </div>
-          {activePlace.properties.specialty && <p className="lead">{activePlace.properties.specialty}</p>}
+          {(activePlace.properties.description || activePlace.properties.specialty) && (
+            <p className="lead place-description">{activePlace.properties.description || activePlace.properties.specialty}</p>
+          )}
           <dl className="fact-list">
             {yearText("創業", activePlace.properties.foundedYear) && <><dt>店の歴史</dt><dd>{yearText("創業", activePlace.properties.foundedYear)}</dd></>}
             {yearText("神保町で開業", activePlace.properties.jinbochoOpenedYear) && <><dt>神保町</dt><dd>{yearText("開業", activePlace.properties.jinbochoOpenedYear)}</dd></>}
@@ -163,7 +166,10 @@ function DetailPanel({
           <div className="source-box">
             <span>出典 · {activePlace.properties.observedAt}確認</span>
             <a href={activePlace.properties.sourceUrl} target="_blank" rel="noreferrer">{activePlace.properties.sourceLabel} ↗</a>
-            {activePlace.properties.website && activePlace.properties.website !== activePlace.properties.sourceUrl && (
+            {activePlace.properties.descriptionSourceUrl && activePlace.properties.descriptionSourceUrl !== activePlace.properties.sourceUrl && (
+              <a href={activePlace.properties.descriptionSourceUrl} target="_blank" rel="noreferrer">{activePlace.properties.descriptionSourceLabel ?? "紹介の出典"} ↗</a>
+            )}
+            {activePlace.properties.website && activePlace.properties.website !== activePlace.properties.sourceUrl && activePlace.properties.website !== activePlace.properties.descriptionSourceUrl && (
               <a href={activePlace.properties.website} target="_blank" rel="noreferrer">店舗サイト ↗</a>
             )}
           </div>
@@ -271,7 +277,7 @@ export default function App() {
     if (!data || normalize(query).length < 1) return [];
     const needle = normalize(query);
     return data.places.features
-      .filter(({ properties: p }) => normalize([p.name, ...(p.aliases ?? []), p.specialty ?? "", p.address ?? ""].join(" ")).includes(needle))
+      .filter(({ properties: p }) => normalize([p.name, ...(p.aliases ?? []), p.specialty ?? "", p.description ?? "", p.address ?? ""].join(" ")).includes(needle))
       .sort((a, b) => Number(b.properties.confidence === "confirmed") - Number(a.properties.confidence === "confirmed"))
       .slice(0, 8);
   }, [data, query]);
@@ -342,7 +348,7 @@ export default function App() {
             <label htmlFor="place-search">店を探す</label>
             <div className="search-input-wrap">
               <span aria-hidden="true">⌕</span>
-              <input id="place-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="店名・専門分野・住所" autoComplete="off" />
+              <input id="place-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="店名・特徴・住所" autoComplete="off" />
               {query && <button type="button" onClick={() => setQuery("")} aria-label="検索を消去">×</button>}
             </div>
             {query && (
@@ -374,7 +380,7 @@ export default function App() {
                 </label>
               ))}
             </div>
-            <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。建物を押すと、入っている店が見られます。</p>
+            <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。拡大すると店名が表示されます。建物や店名を押すと、入っている店が見られます。</p>
             {visibleLayers.bookEra && <p className="layer-note">創業年代は色が濃いほど古い店です。確認できた店のみ表示します。</p>}
           </section>
         </aside>

@@ -52,6 +52,9 @@ export type PlaceProperties = {
   category: PlaceCategory;
   subcategory?: string;
   specialty?: string;
+  description?: string;
+  descriptionSourceUrl?: string;
+  descriptionSourceLabel?: string;
   floor?: string;
   address?: string;
   foundedYear?: number;

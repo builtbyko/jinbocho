@@ -61,6 +61,10 @@ for (const feature of buildings.features) {
 for (const record of curated.places) {
   assert(record.id && record.name && record.address, "curated record lacks identity/address");
   assert(record.sourceUrl && record.sourceLabel && record.sourceType, `curated ${record.id} lacks provenance`);
+  assert(record.description?.trim(), `curated ${record.id} lacks a short introduction`);
+  const published = places.features.find((feature) => feature.properties.id === record.id)?.properties;
+  assert(published?.description === record.description, `curated ${record.id} is not synced to the map`);
+  assert(published?.observedAt === curated.checkedAt, `curated ${record.id} has an outdated checked date`);
 }
 
 assert(summary.buildingCount === buildings.features.length, "summary buildingCount mismatch");
