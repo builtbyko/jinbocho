@@ -43,7 +43,7 @@ function MapLegend({
     { label: "道路", color: "#e9ebe8" },
     { label: "歩道（登録部分）", color: "#fbfaf7" },
   ];
-  if (visibleLayers.buildings) items.push({ label: "建物", color: "#dadbd6" });
+  if (visibleLayers.buildings) items.push({ label: "灰色の建物", color: "#dadbd6" });
   if (visibleLayers.antiquarian_bookstore) items.push({ label: "古書店", color: "#a6533c" });
   if (visibleLayers.bookstore) items.push({ label: "新刊・専門書店", color: "#d98a4e" });
   if (visibleLayers.cafe) items.push({ label: "喫茶・カフェ", color: "#4f7f78" });
@@ -90,7 +90,8 @@ function MapLegend({
               </div>
             </div>
           )}
-          <p className="map-legend-note">色の面は建物の代表用途。建物を押すと店を確認できます。</p>
+          <p className="map-legend-note">色付きは建物の代表的な店の種類。建物を押すと店を確認できます。</p>
+          {visibleLayers.buildings && <p className="map-legend-note">灰色は店の情報がない、地上階の店が未判定、または非表示中の種類です。住宅・空き店舗を示す色ではありません。</p>}
         </div>
       )}
     </aside>
@@ -381,6 +382,7 @@ export default function App() {
               ))}
             </div>
             <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。拡大すると店名が表示されます。建物や店名を押すと、入っている店が見られます。</p>
+            {visibleLayers.buildings && <p className="layer-note">灰色の建物は店の情報なし・地上階の店が未判定・非表示中の種類。住宅や空き店舗を示す色ではありません。</p>}
             {visibleLayers.bookEra && <p className="layer-note">創業年代は色が濃いほど古い店です。確認できた店のみ表示します。</p>}
           </section>
         </aside>
