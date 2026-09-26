@@ -54,7 +54,7 @@ export function buildingLabelData(data: AtlasData, layers: Record<LayerKey, bool
   for (const building of data.buildings.features) {
     const occupants = occupantsByBuilding.get(building.properties.id) ?? [];
     const candidates = occupants.filter((place) => isCategoryVisible(place, layers)
-      || (layers.bookEra && (place.category === "antiquarian_bookstore" || place.category === "bookstore") && place.era !== "unknown"));
+      || (layers.bookEra && place.category === "antiquarian_bookstore" && Boolean(place.foundedYear) && place.era !== "unknown"));
     const confirmedCandidates = candidates.filter((place) => place.confidence === "confirmed");
     const representatives = confirmedCandidates.length ? confirmedCandidates : candidates;
     representatives.sort((a, b) => representativePriority(a, building.properties) - representativePriority(b, building.properties)

@@ -1107,6 +1107,27 @@ a:focus-visible {
   background: #f7f6f2;
 }
 
+.layer-row.is-book-group-start,
+.layer-row.is-book-group-end {
+  margin-left: 4px;
+  padding-left: 9px;
+  border-left: 2px solid #a6533c;
+  background: #faf7f4;
+}
+
+.layer-row.is-book-group-start {
+  border-bottom-color: #f0e9e3;
+}
+
+.layer-row.is-book-group-end {
+  margin-bottom: 5px;
+}
+
+.layer-row.is-book-group-start:hover,
+.layer-row.is-book-group-end:hover {
+  background: #f5eee9;
+}
+
 .layer-row input[type="checkbox"] {
   width: 16px;
   height: 16px;

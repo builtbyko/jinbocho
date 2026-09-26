@@ -44,23 +44,41 @@ const USE_COLOR: ExpressionSpecification = [
 ];
 
 const ERA_COLOR: ExpressionSpecification = [
-  "case",
-  ["!", ["get", "hasBookstore"]],
-  "#ddd9cf",
-  [
-    "match",
-    ["get", "bookstoreEra"],
-    "prewar",
-    "#6c3328",
-    "1945-1969",
-    "#9e5540",
-    "1970-1999",
-    "#c67b55",
-    "2000-present",
-    "#e3aa75",
-    "#c9c4b8",
-  ],
+  "match",
+  ["get", "antiquarianEra"],
+  "prewar",
+  "#6c3328",
+  "1945-1969",
+  "#9e5540",
+  "1970-1999",
+  "#c67b55",
+  "2000-present",
+  "#e3aa75",
+  "#c9c4b8",
 ];
+
+function oldestAntiquarianEras(data: AtlasData) {
+  const eras = new Map<string, { year: number; era: string }>();
+  for (const { properties: place } of data.places.features) {
+    if (place.category !== "antiquarian_bookstore" || !place.buildingId || !place.foundedYear || place.era === "unknown") continue;
+    const current = eras.get(place.buildingId);
+    if (!current || place.foundedYear < current.year) {
+      eras.set(place.buildingId, { year: place.foundedYear, era: place.era });
+    }
+  }
+  return eras;
+}
+
+function antiquarianEraBuildings(data: AtlasData) {
+  const eras = oldestAntiquarianEras(data);
+  return {
+    type: "FeatureCollection" as const,
+    features: data.buildings.features.flatMap((building) => {
+      const age = eras.get(building.properties.id);
+      return age ? [{ ...building, properties: { ...building.properties, antiquarianEra: age.era } }] : [];
+    }),
+  };
+}
 
 function getFeatureId(feature: MapGeoJSONFeature | undefined) {
   return String(feature?.properties?.id ?? "") || undefined;
@@ -85,7 +103,10 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, 
   const visibleCategories = categoryFilter(visibleLayers);
   map.setFilter("buildings-category", visibleCategories);
   map.setLayoutProperty("buildings-era", "visibility", visibleLayers.bookEra ? "visible" : "none");
-  const eraBuildings: ExpressionSpecification = ["all", ["==", ["get", "hasBookstore"], true], ["!=", ["get", "bookstoreEra"], "unknown"]];
+  const eraBuildingIds = [...oldestAntiquarianEras(data).keys()];
+  const eraBuildings: ExpressionSpecification = eraBuildingIds.length
+    ? ["in", ["get", "id"], ["literal", eraBuildingIds]]
+    : ["==", ["get", "id"], "__none__"];
   map.setFilter(
     "building-hit",
     visibleLayers.buildings
@@ -182,6 +203,7 @@ export default function MapView({
       map.addSource("basemap-sidewalks", { type: "geojson", data: data.basemapSidewalks });
       map.addSource("basemap-road-names", { type: "geojson", data: data.basemapRoadNames });
       map.addSource("buildings", { type: "geojson", data: data.buildings, promoteId: "id" });
+      map.addSource("antiquarian-eras", { type: "geojson", data: antiquarianEraBuildings(data) });
       map.addSource("alleys", { type: "geojson", data: data.alleys });
       map.addSource("shop-names", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
 
@@ -236,9 +258,8 @@ export default function MapView({
       map.addLayer({
         id: "buildings-era",
         type: "fill",
-        source: "buildings",
+        source: "antiquarian-eras",
         minzoom: 14.3,
-        filter: ["all", ["==", ["get", "hasBookstore"], true], ["!=", ["get", "bookstoreEra"], "unknown"]],
         layout: { visibility: "none" },
         paint: { "fill-color": ERA_COLOR, "fill-opacity": 0.9 },
       });

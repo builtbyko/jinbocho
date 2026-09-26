@@ -79,7 +79,7 @@ function MapLegend({
           </div>
           {visibleLayers.bookEra && (
             <div className="map-legend-era">
-              <h2>書店の創業年代</h2>
+              <h2>古書店の創業年代</h2>
               <div className="map-legend-list">
                 {eraLegend.filter(([key]) => key !== "unknown").map(([key, label, color]) => (
                   <div className="map-legend-item" key={key}>
@@ -318,11 +318,15 @@ export default function App() {
   const layers: { id: LayerKey; name: string; color: string; count: number; line?: boolean }[] = [
     { id: "buildings", name: "建物", color: "#d9d4c8", count: data.summary.buildingCount },
     { id: "antiquarian_bookstore", name: "古書店", color: "#a6533c", count: countCategory("antiquarian_bookstore") },
+    {
+      id: "bookEra", name: "創業年代", color: "#6c3328",
+      count: data.places.features.filter(({ properties: place }) => place.category === "antiquarian_bookstore"
+        && place.buildingId && place.foundedYear && place.era !== "unknown").length,
+    },
     { id: "bookstore", name: "新刊・専門書店", color: "#d98a4e", count: countCategory("bookstore") },
     { id: "cafe", name: "喫茶・カフェ", color: "#4f7f78", count: data.summary.cafeCount },
     { id: "restaurant", name: "飲食店", color: "#7f6b9f", count: data.summary.restaurantCount },
     { id: "other", name: "その他の店・施設", color: "#7389a6", count: otherCount },
-    { id: "bookEra", name: "書店の創業年代", color: "#6c3328", count: data.summary.bookstoreEraCount },
     { id: "alleys", name: "路地・細街路", color: "#495753", count: data.summary.alleyCount, line: true },
   ];
 
@@ -365,10 +369,14 @@ export default function App() {
             <h2>レイヤー</h2>
             <div className="layer-list">
               {layers.map((layer) => (
-                <label className="layer-row" key={layer.id}>
+                <label
+                  className={layer.id === "antiquarian_bookstore" ? "layer-row is-book-group-start" : layer.id === "bookEra" ? "layer-row is-book-group-end" : "layer-row"}
+                  key={layer.id}
+                >
                   <input
                     type="checkbox"
                     checked={visibleLayers[layer.id]}
+                    aria-label={layer.id === "bookEra" ? "古書店の創業年代" : undefined}
                     onChange={() => setVisibleLayers((current) => ({ ...current, [layer.id]: !current[layer.id] }))}
                   />
                   <span
@@ -383,7 +391,7 @@ export default function App() {
             </div>
             <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。拡大すると店名が表示されます。建物や店名を押すと、入っている店が見られます。</p>
             {visibleLayers.buildings && <p className="layer-note">灰色の建物は店の情報なし・地上階の店が未判定・非表示中の種類。住宅や空き店舗を示す色ではありません。</p>}
-            {visibleLayers.bookEra && <p className="layer-note">創業年代は色が濃いほど古い店です。確認できた店のみ表示します。</p>}
+            {visibleLayers.bookEra && <p className="layer-note">創業年代を確認できた古書店のみ色分けします。</p>}
           </section>
         </aside>
 
