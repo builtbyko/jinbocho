@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
 import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import type {
@@ -116,6 +116,11 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, 
         ? ["any", visibleCategories, eraBuildings]
         : visibleCategories,
   );
+  if (map.getLayer("history-markers")) {
+    for (const id of ["history-hit","history-markers","history-symbols"]) map.setFilter(id, visibleCategories);
+    const enabledIds=data.places.features.filter(f=>f.properties.bookwalkImported && f.properties.buildingId && (visibleLayers.buildings || (f.properties.category === "antiquarian_bookstore" ? visibleLayers.antiquarian_bookstore : f.properties.category === "bookstore" ? visibleLayers.bookstore : f.properties.category === "cafe" ? visibleLayers.cafe : visibleLayers.other))).map(f=>f.properties.buildingId!);
+    map.setFilter("history-buildings",["in",["get","id"],["literal",enabledIds]]);
+  }
   const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
   map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
   map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
@@ -141,6 +146,56 @@ export default function MapView({
   onSelectBuilding,
   onSelectPlace,
 }: Props) {
+  const [locationStatus, setLocationStatus] = useState("");
+  const [locating, setLocating] = useState(false);
+  const watchRef = useRef<number>();
+  const markerRef = useRef<maplibregl.Marker>();
+  const followRef = useRef(false);
+  const readyRef = useRef(false);
+  const overview = () => {
+    followRef.current = false;
+    mapRef.current?.flyTo({center:[139.7572,35.69625],zoom:16.35,padding:{top:0,bottom:0,left:0,right:0},duration:500});
+  };
+  const locate = () => {
+    if (watchRef.current !== undefined) {
+      navigator.geolocation.clearWatch(watchRef.current);
+      watchRef.current = undefined;
+      followRef.current = false;
+      setLocating(false);
+      setLocationStatus("現在地の更新を停止しました");
+      return;
+    }
+    if (!navigator.geolocation || !window.isSecureContext) {
+      setLocationStatus("この環境では現在地を利用できません"); return;
+    }
+    if (!readyRef.current) { setLocationStatus("地図を読み込んでいます。少し待ってから押してください"); return; }
+    followRef.current = true;
+    setLocating(true);
+    setLocationStatus("現在地を取得中。位置情報の利用を許可してください");
+    watchRef.current = navigator.geolocation.watchPosition(position => {
+      const map = mapRef.current;
+      if (!map) return;
+      const {longitude:lng, latitude:lat, accuracy} = position.coords;
+      if (!markerRef.current) {
+        const dot=document.createElement("div"); dot.className="user-location-dot";
+        markerRef.current = new maplibregl.Marker({element:dot}).setLngLat([lng,lat]).addTo(map);
+      }
+      else markerRef.current.setLngLat([lng,lat]);
+      markerRef.current.getElement().setAttribute("aria-label", "現在地");
+      const ring = Array.from({length:65},(_,i) => {
+        const a=i*Math.PI/32;
+        return [lng+Math.cos(a)*accuracy/(111320*Math.cos(lat*Math.PI/180)),lat+Math.sin(a)*accuracy/111320];
+      });
+      (map.getSource("location-accuracy") as GeoJSONSource).setData({type:"Feature",properties:{},geometry:{type:"Polygon",coordinates:[ring]}});
+      if (followRef.current) map.easeTo({center:[lng,lat],zoom:17.5,padding:{top:0,bottom:0,left:0,right:0},duration:500});
+      const outside=lng<139.747||lng>139.767||lat<35.689||lat>35.7035;
+      setLocationStatus(`現在地を表示中 · 精度 約${Math.round(accuracy)}m。${outside ? "神保町の外です。「全体」で地図に戻れます" : "地図を動かすと追従を止めます"}`);
+    },error => {
+      if (watchRef.current !== undefined) navigator.geolocation.clearWatch(watchRef.current);
+      watchRef.current=undefined; setLocating(false); followRef.current=false;
+      setLocationStatus(error.code===1 ? "位置情報が許可されていません。ブラウザのサイト設定で許可してください" : error.code===3 ? "取得に時間がかかっています。屋外で再度お試しください" : "現在地を取得できません。端末の位置情報設定を確認してください");
+    },{enableHighAccuracy:true,timeout:20000,maximumAge:10000});
+  };
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap>();
   const callbacksRef = useRef({ onSelectBuilding, onSelectPlace });
@@ -162,12 +217,8 @@ export default function MapView({
       container: containerRef.current,
       center: [139.7572, 35.69625],
       zoom: 16.35,
-      minZoom: 15,
+      minZoom: 2,
       maxZoom: 20,
-      maxBounds: [
-        [139.747, 35.689],
-        [139.767, 35.7035],
-      ],
       attributionControl: false,
       locale: { "GeolocateControl.FindMyLocation": "現在地を表示", "GeolocateControl.TrackLocation": "現在地を追従", "GeolocateControl.LocationNotAvailable": "現在地を取得できません" },
       style: {
@@ -183,12 +234,6 @@ export default function MapView({
 
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
-    map.addControl(new maplibregl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true, timeout: 20000 },
-      trackUserLocation: true,
-      showAccuracyCircle: true,
-      fitBoundsOptions: { maxZoom: 17.5 },
-    }), "bottom-right");
     map.addControl(
       new maplibregl.AttributionControl({
         compact: true,
@@ -197,7 +242,9 @@ export default function MapView({
       "bottom-right",
     );
 
+    map.on("dragstart", () => { followRef.current = false; });
     map.on("load", () => {
+      readyRef.current = true;
       map.addSource("outside-context", {
         type: "raster",
         tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
@@ -415,6 +462,15 @@ export default function MapView({
         },
       });
 
+      map.addSource("history-places", {type:"geojson",data:{type:"FeatureCollection",features:data.places.features.filter(f=>f.properties.bookwalkImported).map(f=>({...f,properties:{...f.properties,primaryUse:f.properties.category}}))}});
+      const historyIds=data.places.features.filter(f=>f.properties.bookwalkImported && f.properties.buildingId).map(f=>f.properties.buildingId!);
+      map.addLayer({id:"history-buildings",type:"line",source:"buildings",filter:["in",["get","id"],["literal",historyIds]],paint:{"line-color":"#244e47","line-width":2.5,"line-opacity":.95}});
+      map.addLayer({id:"history-hit",type:"circle",source:"history-places",paint:{"circle-radius":19,"circle-opacity":0}});
+      map.addLayer({id:"history-markers",type:"circle",source:"history-places",paint:{"circle-radius":10,"circle-color":"#244e47","circle-stroke-color":"#fffdf8","circle-stroke-width":2}});
+      map.addLayer({id:"history-symbols",type:"symbol",source:"history-places",layout:{"text-field":"i","text-font":["Noto Sans CJK JP","sans-serif"],"text-size":14,"text-allow-overlap":true,"text-ignore-placement":true},paint:{"text-color":"#fff"}});
+      map.addSource("location-accuracy",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
+      map.addLayer({id:"location-accuracy",type:"fill",source:"location-accuracy",paint:{"fill-color":"#3979d6","fill-opacity":.12}});
+      map.addLayer({id:"location-accuracy-edge",type:"line",source:"location-accuracy",paint:{"line-color":"#3979d6","line-opacity":.5,"line-width":1}});
       // Curated sites outside the footprint coverage remain directly selectable.
       map.addLayer({id:"standalone-places",type:"circle",source:"standalone-places",paint:{
         "circle-radius":7,"circle-color":"#b29a45","circle-stroke-color":"#fff","circle-stroke-width":2,
@@ -429,7 +485,7 @@ export default function MapView({
       syncBuildingSelection(map, selectedBuildingIdRef.current);
 
       map.on("mousemove", (event) => {
-        const building = map.queryRenderedFeatures(event.point, { layers: ["standalone-places", "standalone-labels", "shop-names-confirmed", "shop-names", "building-hit"] })[0];
+        const building = map.queryRenderedFeatures(event.point, { layers: ["history-hit", "standalone-places", "standalone-labels", "shop-names-confirmed", "shop-names", "building-hit"] })[0];
         map.getCanvas().style.cursor = building ? "pointer" : "grab";
         map.setFilter("building-hover", ["==", ["get", "id"], getFeatureId(building) ?? ""]);
       });
@@ -438,8 +494,8 @@ export default function MapView({
         map.setFilter("building-hover", ["==", ["get", "id"], ""]);
       });
       map.on("click", (event: MapMouseEvent) => {
-        const building = map.queryRenderedFeatures(event.point, { layers: ["standalone-places", "standalone-labels", "shop-names-confirmed", "shop-names", "building-hit"] })[0];
-        if (building?.layer.id.startsWith("standalone-")) {
+        const building = map.queryRenderedFeatures(event.point, { layers: ["history-hit", "standalone-places", "standalone-labels", "shop-names-confirmed", "shop-names", "building-hit"] })[0];
+        if (building?.layer.id === "history-hit" || building?.layer.id.startsWith("standalone-")) {
           const id = getFeatureId(building);
           if (id) callbacksRef.current.onSelectPlace(id);
           return;
@@ -449,6 +505,9 @@ export default function MapView({
     });
 
     return () => {
+      if (watchRef.current !== undefined) navigator.geolocation.clearWatch(watchRef.current);
+      markerRef.current?.remove();
+      readyRef.current = false;
       map.remove();
       mapRef.current = undefined;
     };
@@ -471,13 +530,22 @@ export default function MapView({
     if (!map || !focusPlaceId) return;
     const feature = placeById.get(focusPlaceId);
     if (!feature) return;
+    followRef.current = false;
     const mobile = window.innerWidth <= 960;
     const padding = mobile
-      ? { top: Math.round(map.getContainer().clientHeight * .48), bottom: 30, left: 20, right: 20 }
+      ? { top: 50, bottom: Math.round(map.getContainer().clientHeight * .50), left: 20, right: 20 }
       : { top: 30, bottom: 30, left: 30, right: 400 };
     map.flyTo({ center: feature.geometry.coordinates as [number, number], zoom: 18.25, padding,
       duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700 });
   }, [focusPlaceId, placeById]);
 
-  return <div ref={containerRef} className="map-canvas" aria-label="神保町の建物を選んで店舗を調べる地図" />;
+  return <>
+    <div ref={containerRef} className="map-canvas" aria-label="神保町の建物を選んで店舗を調べる地図" />
+    <div className="walking-controls">
+      <button type="button" onClick={locate} aria-pressed={locating}>◎ {locating ? "現在地を停止" : "現在地"}</button>
+      <button type="button" onClick={overview}>全体</button>
+    </div>
+    <p className="history-map-key"><span aria-hidden="true">i</span> 解説のある場所</p>
+    {locationStatus && <div className="location-status" role="status"><span>{locationStatus}</span><button type="button" aria-label="現在地の案内を閉じる" onClick={()=>setLocationStatus("")}>×</button></div>}
+  </>;
 }
