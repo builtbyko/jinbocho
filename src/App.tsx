@@ -43,7 +43,7 @@ const initialLayers: Record<LayerKey, boolean> = {
   bookEra: false,
   alleys: false,
   districtPlan: false,
-  roadTypes: true,
+  roadTypes: false,
 };
 
 function MapLegend({

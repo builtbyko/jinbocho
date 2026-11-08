@@ -127,7 +127,7 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, 
   }
   for (const id of ["district-plan-fill","district-plan-line"]) map.setLayoutProperty(id,"visibility",visibleLayers.districtPlan ? "visible" : "none");
   map.setLayoutProperty("road-classification","visibility",visibleLayers.roadTypes ? "visible" : "none");
-  map.setLayoutProperty("road-names","text-field",visibleLayers.roadTypes ? ["case",["==",["get","roadKind"],"metropolitan"],["format",["get","name"],{}," ",{},["image",["get","routeIcon"]],{}],["get","displayName"]] : ["get","name"]);
+  map.setLayoutProperty("road-names","text-field",["case",["==",["get","roadKind"],"metropolitan"],["format",["get","name"],{}," ",{},["image",["get","routeIcon"]],{}],["get","displayName"]]);
   const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
   map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
   map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
