@@ -1453,3 +1453,6 @@ button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible{o
 .exterior-photo{margin:0 0 20px;border:1px solid var(--line);border-radius:6px;overflow:hidden}.exterior-photo summary{padding:12px;font-size:13px;font-weight:650;cursor:pointer;min-height:44px}.exterior-photo summary span{margin-left:8px;font-size:11px;color:var(--muted);font-weight:400}
 .exterior-photo figure{margin:0;padding:0 12px 12px}.exterior-photo img{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:#eeeae2}.exterior-photo figcaption{margin-top:9px;font-size:11px;line-height:1.8;color:#5b645f}.exterior-photo a{color:#446b5a}
 @media(max-width:960px){.look-for p{font-size:15px}.exterior-photo summary{font-size:14px}}
+
+.google-maps-link{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;margin:14px 0;padding:10px 13px;border:1px solid #bccbc2;border-radius:7px;background:#f3f6f1;color:#244e47;font-size:14px;font-weight:650;text-decoration:none;touch-action:manipulation}
+.google-maps-link:hover{background:#e8efe7}.google-maps-link span{font-size:18px}

@@ -19,6 +19,12 @@ function yearText(label: string, year?: number) {
   return year ? `${label} ${year}年` : undefined;
 }
 
+function googleMapsUrl(place: PlaceFeature) {
+  const { name, address } = place.properties;
+  const query = `${name} ${address || "東京都千代田区神田神保町"}`;
+  return `https://www.google.com/maps/search/?${new URLSearchParams({api:"1",query})}`;
+}
+
 function floorText(value?: string) {
   if (!value) return "";
   if (/^-?\d+(?:\s*[,;]\s*-?\d+)*$/.test(value)) {
@@ -159,6 +165,9 @@ function DetailPanel({
               {activePlace.properties.confidence === "confirmed" ? "出典確認" : "OSM参考"}
             </span>
           </div>
+          <a className="google-maps-link" href={googleMapsUrl(activePlace)} target="_blank" rel="noopener noreferrer" aria-label={`${activePlace.properties.name}をGoogle マップで開く`}>
+            Google マップで開く <span aria-hidden="true">↗</span>
+          </a>
           {activePlace.properties.bookwalkImported && (
             <dl className="history-dates">
               <div><dt>{activePlace.properties.foundingLabel ?? "店の創業"}</dt><dd>{activePlace.properties.foundingDisplay}</dd></div>
