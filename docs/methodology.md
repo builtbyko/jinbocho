@@ -40,7 +40,7 @@ OSMだけの店舗は「OSM参考」、公式ページ等で照合した店舗�
 - `foundedYear`: 店・事業の創業年
 - `jinbochoOpenedYear`: 神保町での開業年
 - `currentLocationSince`: 現在地への移転年
-- 将来追加する `buildingCompletedYear`: 現建物の竣工年
+- `buildingCompletedYear`: 現建物の竣工年
 
 地図の「古書店の創業年代」は、古書店に分類された店舗の `foundedYear` を使います。同じ建物に複数の古書店がある場合は、最も古い創業年で建物を色分けします。由来が別地域の創業である場合は詳細カードに明記します。
 
@@ -58,3 +58,10 @@ Google Mapsや食べログの点数・口コミは取得・保存・転載しま
 - 路地幅の区分、段差、通り抜け、アーケード
 - 店先の書棚・ワゴン・ベンチ
 - 建物と店の写真（撮影・公開許諾を確認）
+
+
+## 歴史・建物の移行データ
+
+`bookwalkImported` の15地点は jinbocho.book の調査情報を統合したものです。`foundingDisplay` と `foundingLabel` は創業・創立の表記、`buildingCompletedText` は建物の年代の表示です。確認できた単一の竣工年だけを `buildingCompletedYear` に持ちます。文房堂は外壁の1922年と本体建替えの1990年をそれぞれ `originalFacadeYear` / `buildingRebuiltYear` に記録し、単純な1922年竣工の現存建物として扱いません。
+
+`historySources` は複数出典、`historyCheckedAt` は元の調査確認日です。各curatedレコードの `checkedAt` がある場合は、ファイル全体の日付より優先します。統合しただけで古い情報の確認日を更新しません。`coordinates` と `replacesPlaceIds` は再生成でも位置・重複統合を保つための情報です。神田教会などの建物形状範囲外の地点は、建物を推定して割り当てず点で表示します。

@@ -4,7 +4,11 @@
     {
       "id": "takayama-honten",
       "name": "書肆 髙山本店",
-      "aliases": ["高山本店", "髙山本店", "書肆高山本店"],
+      "aliases": [
+        "高山本店",
+        "髙山本店",
+        "書肆高山本店"
+      ],
       "category": "antiquarian_bookstore",
       "subcategory": "古書店",
       "address": "東京都千代田区神田神保町2-3-3",
@@ -23,64 +27,11 @@
       "note": "創業年は事業の起点。神保町で店を営み始めた時期、現在地への移転年とは別です。"
     },
     {
-      "id": "kitazawa-bookstore",
-      "name": "北沢書店",
-      "aliases": ["KITAZAWA BOOKSTORE", "北澤書店"],
-      "category": "antiquarian_bookstore",
-      "subcategory": "洋古書店",
-      "address": "東京都千代田区神田神保町2-5",
-      "floor": "北沢ビル2階",
-      "foundedYear": 1902,
-      "specialty": "英米文学、人文系洋古書、言語学、哲学、人類学",
-      "description": "英米文学を中心に、哲学・言語学・人類学などの洋古書を扱う店。日本やアジアを扱った洋書、オカルト関連書も探せます。",
-      "website": "https://kitazawabook.official.ec/",
-      "sourceLabel": "KITAZAWA BOOKSTORE 公式サイト",
-      "sourceUrl": "https://kitazawabook.official.ec/about",
-      "sourceType": "official",
-      "confidence": "confirmed"
-    },
-    {
-      "id": "isseido-booksellers",
-      "name": "一誠堂書店",
-      "aliases": ["THE ISSEIDO BOOKSELLERS", "一誠堂"],
-      "category": "antiquarian_bookstore",
-      "subcategory": "古書店",
-      "address": "東京都千代田区神田神保町1-7",
-      "foundedYear": 1903,
-      "jinbochoOpenedYear": 1913,
-      "currentLocationSince": 1913,
-      "specialty": "和漢古典籍、文科系古書、稀覯本",
-      "description": "文学・歴史・美術などの古書を幅広く扱う店。2階には洋書や和本のほか、古地図、浮世絵、絵巻も並びます。",
-      "descriptionSourceLabel": "一誠堂書店「フロアガイド」",
-      "descriptionSourceUrl": "https://www.isseido-books.co.jp/guide/",
-      "website": "https://www.isseido-books.co.jp/",
-      "sourceLabel": "一誠堂書店「会社概要・沿革」",
-      "sourceUrl": "https://www.isseido-books.co.jp/about/",
-      "sourceType": "official",
-      "confidence": "confirmed",
-      "note": "1903年に新潟県長岡市で創業し、1906年に神田猿楽町へ移転。神保町の現在地へ移ったのは1913年で、現社屋は1931年竣工です。"
-    },
-    {
-      "id": "yukyudo-books",
-      "name": "悠久堂書店",
-      "aliases": ["悠久堂", "YUKYUDOU"],
-      "category": "antiquarian_bookstore",
-      "subcategory": "古書店",
-      "address": "東京都千代田区神田神保町1-3-2",
-      "foundedYear": 1915,
-      "jinbochoOpenedYear": 1915,
-      "specialty": "美術、中国美術、書道、料理、山岳、動植物",
-      "description": "美術展の図録や料理・食文化の本に加え、山岳・動植物の本を扱う古書店。代を重ねながら、それぞれの得意分野を広げてきました。",
-      "website": "https://yukyudou.com/",
-      "sourceLabel": "悠久堂書店 公式サイト",
-      "sourceUrl": "https://yukyudou.com/aboutus/",
-      "sourceType": "official",
-      "confidence": "confirmed"
-    },
-    {
       "id": "uchiyama-shoten",
       "name": "内山書店",
-      "aliases": ["株式会社内山書店"],
+      "aliases": [
+        "株式会社内山書店"
+      ],
       "category": "bookstore",
       "subcategory": "中国・アジア専門書店",
       "address": "東京都千代田区神田神保町1-15",
@@ -96,42 +47,11 @@
       "note": "1917年は上海での創業。東京店は1935年開業、1968年に現在のすずらん通りへ移転。"
     },
     {
-      "id": "yaguchi-shoten",
-      "name": "矢口書店",
-      "aliases": ["古書 矢口書店"],
-      "category": "antiquarian_bookstore",
-      "subcategory": "古書店",
-      "address": "東京都千代田区神田神保町2-5-1",
-      "foundedYear": 1918,
-      "currentLocationSince": 1934,
-      "specialty": "映画、演劇、演芸、落語、戯曲、シナリオ、音楽",
-      "description": "映画・演劇・落語の本に加え、台本やポスター、パンフレットを扱う店。隣の新店では映画雑誌のバックナンバーや音楽資料も探せます。",
-      "website": "https://yaguchishoten.jp/",
-      "sourceLabel": "矢口書店「店舗案内・略史」",
-      "sourceUrl": "https://yaguchishoten.jp/about/",
-      "sourceType": "official",
-      "confidence": "confirmed"
-    },
-    {
-      "id": "komiyama-bookstore",
-      "name": "小宮山書店",
-      "aliases": ["KOMIYAMA TOKYO", "KOMIYAMA BOOKSTORE"],
-      "category": "antiquarian_bookstore",
-      "subcategory": "古書・アート",
-      "address": "東京都千代田区神田神保町1-7",
-      "foundedYear": 1939,
-      "specialty": "写真集、ファッション、現代美術、民芸・工芸、ヴィンテージプリント",
-      "description": "写真集やファッション、アートの本を扱う古書店。書籍や雑誌とともに、ヴィンテージの写真プリントやポスター、作品も販売しています。",
-      "website": "https://book-komiyama.co.jp/",
-      "sourceLabel": "小宮山書店「About US」",
-      "sourceUrl": "https://book-komiyama.co.jp/about/",
-      "sourceType": "official",
-      "confidence": "confirmed"
-    },
-    {
       "id": "book-house-cafe",
       "name": "ブックハウスカフェ",
-      "aliases": ["Book House Cafe"],
+      "aliases": [
+        "Book House Cafe"
+      ],
       "category": "bookstore",
       "subcategory": "こどもの本専門店・カフェ",
       "address": "東京都千代田区神田神保町2-5",
@@ -147,7 +67,9 @@
     {
       "id": "ladrio",
       "name": "ラドリオ",
-      "aliases": ["LADRIO"],
+      "aliases": [
+        "LADRIO"
+      ],
       "category": "cafe",
       "subcategory": "喫茶店",
       "address": "東京都千代田区神田神保町1-3",
@@ -163,7 +85,11 @@
     {
       "id": "milonga-nueva",
       "name": "ミロンガ ヌオーバ",
-      "aliases": ["ミロンガ", "ミロンガ・ヌォーバ", "Milonga Nueva"],
+      "aliases": [
+        "ミロンガ",
+        "ミロンガ・ヌォーバ",
+        "Milonga Nueva"
+      ],
       "category": "cafe",
       "subcategory": "タンゴ喫茶",
       "address": "東京都千代田区神田神保町1-3-3",
@@ -177,27 +103,11 @@
       "notableReason": "千代田区観光協会公式サイト掲載"
     },
     {
-      "id": "sabouru",
-      "name": "さぼうる",
-      "aliases": ["サボウル", "Sabouru"],
-      "category": "cafe",
-      "subcategory": "純喫茶",
-      "address": "東京都千代田区神田神保町1-11",
-      "foundedYear": 1955,
-      "specialty": "純喫茶、クリームソーダ、軽食",
-      "description": "色を選べるクリームソーダやいちごジュースがある喫茶店。サンドイッチやピザトーストもあり、地下と小上がりを含む3フロアの店内が特徴です。",
-      "descriptionSourceLabel": "千代田区観光協会「写真映えスポット7選」さぼうる",
-      "descriptionSourceUrl": "https://visit-chiyoda.tokyo/app/feature/detail/149",
-      "sourceLabel": "千代田区観光協会「さぼうる」",
-      "sourceUrl": "https://visit-chiyoda.tokyo/app/spot/detail/482",
-      "sourceType": "association",
-      "confidence": "confirmed",
-      "notableReason": "千代田区観光協会公式サイト掲載"
-    },
-    {
       "id": "luncheon",
       "name": "ランチョン",
-      "aliases": ["ビヤホール ランチョン"],
+      "aliases": [
+        "ビヤホール ランチョン"
+      ],
       "category": "restaurant",
       "subcategory": "洋食・ビヤホール",
       "address": "東京都千代田区神田神保町1-6",
@@ -216,7 +126,10 @@
     {
       "id": "bondy-jimbocho",
       "name": "欧風カレー ボンディ 神保町本店",
-      "aliases": ["ボンディ", "Bondy"],
+      "aliases": [
+        "ボンディ",
+        "Bondy"
+      ],
       "category": "restaurant",
       "subcategory": "欧風カレー",
       "address": "東京都千代田区神田神保町2-3",
@@ -229,6 +142,646 @@
       "sourceType": "association",
       "confidence": "confirmed",
       "notableReason": "神田カレーグランプリ グランプリ受賞（公式観光情報に記載）"
+    },
+    {
+      "id": "osm-node-13108052162",
+      "osmId": 13108052162,
+      "name": "誠心堂書店",
+      "category": "antiquarian_bookstore",
+      "subcategory": "books",
+      "address": "東京都千代田区神田神保町2-24",
+      "website": "https://book-seishindo.com/",
+      "sourceLabel": "千代田区｜誠心堂書店の建物・来歴",
+      "sourceUrl": "https://www.city.chiyoda.lg.jp/documents/4200/14-seishindoshoten-r405.pdf",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "description": "山本書店から独立した田中十蔵が開業。和本・書道・国漢系学術書を専門としてきた書店です。現在の建物は、戦前の商店街に多かった看板建築の形式を引き継いで、戦後に建てられました。",
+      "foundingDisplay": "1930年（昭和5年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "1959年（昭和34年）",
+      "buildingDescription": "設計は沢崎輝男。外壁の黄色いタイルには縦の櫛目が入り、小庇には青いスパニッシュ瓦が使われています。2003年に千代田区の景観まちづくり重要物件に指定されました。",
+      "historySources": [
+        {
+          "label": "千代田区｜誠心堂書店の建物・来歴",
+          "url": "https://www.city.chiyoda.lg.jp/documents/4200/14-seishindoshoten-r405.pdf"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7570883,
+        35.6976241
+      ],
+      "foundedYear": 1930,
+      "buildingCompletedYear": 1959,
+      "descriptionSourceUrl": "https://www.city.chiyoda.lg.jp/documents/4200/14-seishindoshoten-r405.pdf",
+      "descriptionSourceLabel": "千代田区｜誠心堂書店の建物・来歴",
+      "replacesPlaceIds": [
+        "osm-node-13108052162",
+        "osm-node-6768292056"
+      ]
+    },
+    {
+      "id": "kitazawa-bookstore",
+      "name": "北沢書店",
+      "aliases": [
+        "KITAZAWA BOOKSTORE",
+        "北澤書店"
+      ],
+      "category": "antiquarian_bookstore",
+      "subcategory": "洋古書店",
+      "address": "東京都千代田区神田神保町2-5 北沢ビル2F",
+      "floor": "北沢ビル2階",
+      "foundedYear": 1902,
+      "specialty": "英米文学、人文系洋古書、言語学、哲学、人類学",
+      "website": "https://abaj.gr.jp/shop_info.php?shopid=8",
+      "sourceLabel": "日本古書籍商協会｜北澤書店の来歴",
+      "sourceUrl": "https://abaj.gr.jp/shop_info.php?shopid=8",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "osmId": 4030787570,
+      "description": "北澤弥三郎が現在地で創業。学校や図書館への納本を主な仕事として出発しました。1955年に、大学英文科の助教授だった2代目が継ぎ、洋書の専門店となりました。神保町と教育・研究のつながりが、店の歩みにも表れています。",
+      "foundingDisplay": "1902年（明治35年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "日本古書籍商協会｜北澤書店の来歴",
+          "url": "https://abaj.gr.jp/shop_info.php?shopid=8"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7563252,
+        35.6957004
+      ],
+      "descriptionSourceUrl": "https://abaj.gr.jp/shop_info.php?shopid=8",
+      "descriptionSourceLabel": "日本古書籍商協会｜北澤書店の来歴",
+      "replacesPlaceIds": [
+        "kitazawa-bookstore"
+      ]
+    },
+    {
+      "id": "yaguchi-shoten",
+      "name": "矢口書店",
+      "aliases": [
+        "古書 矢口書店"
+      ],
+      "category": "antiquarian_bookstore",
+      "subcategory": "古書店",
+      "address": "東京都千代田区神田神保町2-5-1",
+      "foundedYear": 1918,
+      "currentLocationSince": 1934,
+      "specialty": "映画、演劇、演芸、落語、戯曲、シナリオ、音楽",
+      "website": "https://yaguchishoten.jp/about/",
+      "sourceLabel": "矢口書店｜店の略史",
+      "sourceUrl": "https://yaguchishoten.jp/about/",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "osmId": 3163981761,
+      "description": "錦町で創業し、1934年ごろ現在地へ移転。1975年ごろに映画・演劇を専門とする店へ変わりました。2023年には隣にも売場を広げ、音楽関係の品も扱うようになっています。現在地への移転年は、建物の建築年を示すものではありません。",
+      "foundingDisplay": "1918年（大正7年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "buildingDescription": "木造モルタルの店構えが残ります。映画・演劇の専門店になる前から続く店ですが、現建物の竣工年は確認できていません。",
+      "historySources": [
+        {
+          "label": "矢口書店｜店の略史",
+          "url": "https://yaguchishoten.jp/about/"
+        },
+        {
+          "label": "千代田区観光協会｜店構えと歴史",
+          "url": "https://visit-chiyoda.tokyo/app/spot/detail/512"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7570282,
+        35.6957383
+      ],
+      "descriptionSourceUrl": "https://yaguchishoten.jp/about/",
+      "descriptionSourceLabel": "矢口書店｜店の略史",
+      "replacesPlaceIds": [
+        "yaguchi-shoten"
+      ]
+    },
+    {
+      "id": "isseido-booksellers",
+      "name": "一誠堂書店",
+      "aliases": [
+        "THE ISSEIDO BOOKSELLERS",
+        "一誠堂"
+      ],
+      "category": "antiquarian_bookstore",
+      "subcategory": "古書店",
+      "address": "東京都千代田区神田神保町1-7",
+      "foundedYear": 1903,
+      "jinbochoOpenedYear": 1913,
+      "currentLocationSince": 1913,
+      "specialty": "和漢古典籍、文科系古書、稀覯本",
+      "website": "https://abaj.gr.jp/shop_info.php?shopid=3",
+      "sourceLabel": "一誠堂書店｜創業と移転の沿革",
+      "sourceUrl": "https://www.isseido-books.co.jp/about/",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "note": "1903年に新潟県長岡市で創業し、1906年に神田猿楽町へ移転。神保町の現在地へ移ったのは1913年で、現社屋は1931年竣工です。",
+      "osmId": 3881327216,
+      "description": "新潟県長岡で貸本屋などを営む「酒井書店」として創業し、1906年に神田へ、1913年に現在地へ移りました。神田の大火と関東大震災で焼け出された経験から、現在の店舗は木造ではなく鉄筋コンクリートで建てられました。",
+      "descriptionSourceLabel": "一誠堂書店｜創業と移転の沿革",
+      "descriptionSourceUrl": "https://www.isseido-books.co.jp/about/",
+      "foundingDisplay": "1903年（明治36年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "1931年（昭和6年）10月",
+      "buildingDescription": "東京都市建築研究所の設計、大林組の施工。地上4階・地下1階で、当初は上階に店主の家族や従業員が暮らしました。1階の石材と上階のタイル、入口上のステンドグラスに当時の意匠が残ります。",
+      "historySources": [
+        {
+          "label": "一誠堂書店｜創業と移転の沿革",
+          "url": "https://www.isseido-books.co.jp/about/"
+        },
+        {
+          "label": "一誠堂書店｜建物紹介",
+          "url": "https://www.isseido-books.co.jp/building/"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7588467,
+        35.6958084
+      ],
+      "buildingCompletedYear": 1931,
+      "replacesPlaceIds": [
+        "isseido-booksellers"
+      ]
+    },
+    {
+      "id": "komiyama-bookstore",
+      "name": "小宮山書店",
+      "aliases": [
+        "KOMIYAMA TOKYO",
+        "KOMIYAMA BOOKSTORE"
+      ],
+      "category": "antiquarian_bookstore",
+      "subcategory": "古書・アート",
+      "address": "東京都千代田区神田神保町1-7",
+      "foundedYear": 1939,
+      "specialty": "写真集、ファッション、現代美術、民芸・工芸、ヴィンテージプリント",
+      "website": "https://www.book-komiyama.co.jp/about/shop.php",
+      "sourceLabel": "小宮山書店｜創立と現在の取扱分野",
+      "sourceUrl": "https://www.book-komiyama.co.jp/about/index.php",
+      "sourceType": "official",
+      "confidence": "confirmed",
+      "osmId": 1634100083,
+      "description": "1939年に神田神保町で創立した古書店。現在は写真集、美術、ファッションなどの本に加え、写真作品やポスター、アート作品も扱います。神保町の古書商が、古い本を売買する仕事から写真・美術の展示や海外のブックフェアへと活動を広げている一例です。",
+      "foundingDisplay": "1939年（昭和14年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "小宮山書店｜創立と現在の取扱分野",
+          "url": "https://www.book-komiyama.co.jp/about/index.php"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7595572,
+        35.6958262
+      ],
+      "note": "",
+      "descriptionSourceUrl": "https://www.book-komiyama.co.jp/about/index.php",
+      "descriptionSourceLabel": "小宮山書店｜創立と現在の取扱分野",
+      "replacesPlaceIds": [
+        "komiyama-bookstore"
+      ]
+    },
+    {
+      "id": "osm-node-1634100115",
+      "osmId": 1634100115,
+      "name": "田村書店",
+      "category": "antiquarian_bookstore",
+      "subcategory": "books",
+      "floor": "0;1",
+      "address": "東京都千代田区神田神保町1-7",
+      "website": "https://www.kosho.or.jp/abouts/?id=12010180",
+      "sourceLabel": "専修大学｜神保町古書店街の研究・表6-1",
+      "sourceUrl": "https://senshu-u.repo.nii.ac.jp/record/13244/files/3051_0544_02.pdf",
+      "sourceType": "editorial",
+      "confidence": "confirmed",
+      "description": "1904年創業。専修大学の神保町古書店街の研究では、1964年以前は古書全般を扱う店として整理されています。現在は日本の文学書や、フランス語・ドイツ語の文学・哲学などの洋書を扱い、挿絵本や装丁本も専門分野に含まれます。",
+      "foundingDisplay": "1904年（明治37年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "専修大学｜神保町古書店街の研究・表6-1",
+          "url": "https://senshu-u.repo.nii.ac.jp/record/13244/files/3051_0544_02.pdf"
+        },
+        {
+          "label": "日本の古本屋｜田村書店の取扱分野",
+          "url": "https://www.kosho.or.jp/abouts/?id=12010180"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7595044,
+        35.6958268
+      ],
+      "foundedYear": 1904,
+      "descriptionSourceUrl": "https://senshu-u.repo.nii.ac.jp/record/13244/files/3051_0544_02.pdf",
+      "descriptionSourceLabel": "専修大学｜神保町古書店街の研究・表6-1",
+      "replacesPlaceIds": [
+        "osm-node-1634100115"
+      ]
+    },
+    {
+      "id": "osm-node-1634100079",
+      "osmId": 1634100079,
+      "name": "大屋書房",
+      "category": "antiquarian_bookstore",
+      "subcategory": "books",
+      "address": "東京都千代田区神田神保町1-1",
+      "website": "https://ohya-shobo.com/",
+      "sourceLabel": "大屋書房｜日本古書籍商協会ブックフェア",
+      "sourceUrl": "https://ohya.abaj.gr.jp/",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "description": "明治15年創業。江戸時代の和本・浮世絵・古地図を扱う店で、駿河台下交差点のそばにあります。かつては出版も手がけ、大屋書房の名で刊行した本も残っています。古い地図や版本を通じて、江戸の地理や暮らしを伝えてきた書店です。",
+      "foundingDisplay": "1882年（明治15年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "大屋書房｜日本古書籍商協会ブックフェア",
+          "url": "https://ohya.abaj.gr.jp/"
+        },
+        {
+          "label": "千代田図書館｜大屋書房の来歴と出版",
+          "url": "https://chiyoda-dokusho.jp/blog/2010/04/vol35.html"
+        },
+        {
+          "label": "大屋書房｜店舗案内",
+          "url": "https://www.ohya-shobo.com/store/"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7605077,
+        35.6958528
+      ],
+      "foundedYear": 1882,
+      "descriptionSourceUrl": "https://ohya.abaj.gr.jp/",
+      "descriptionSourceLabel": "大屋書房｜日本古書籍商協会ブックフェア",
+      "replacesPlaceIds": [
+        "osm-node-1634100079"
+      ]
+    },
+    {
+      "id": "osm-node-3343070908",
+      "osmId": 3343070908,
+      "name": "山田書店 美術部",
+      "category": "antiquarian_bookstore",
+      "subcategory": "books",
+      "floor": "2・3階",
+      "address": "東京都千代田区神田神保町1-8 山田ビル2・3F",
+      "website": "https://www.yamada-shoten.com/",
+      "sourceLabel": "山田書店｜店の公式沿革",
+      "sourceUrl": "https://www.yamada-shoten.com/onlinestore/store.php",
+      "sourceType": "official",
+      "confidence": "confirmed",
+      "description": "店の公式案内では、山田朝一が1936年に開業。当初は文学書の初版本を中心に扱い、浮世絵研究家・石井研堂の勧めで浮世絵も扱うようになりました。その後、新版画・創作版画へと分野が広がっています。",
+      "foundingDisplay": "1936年（昭和11年）※店公式",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "山田書店｜店の公式沿革",
+          "url": "https://www.yamada-shoten.com/onlinestore/store.php"
+        },
+        {
+          "label": "日本古書籍商協会｜創業・移転の記載",
+          "url": "https://abaj.gr.jp/shop_info.php?shopid=25"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7588155,
+        35.6961513
+      ],
+      "note": "創業年は店公式の1936年を掲載しています。日本古書籍商協会の案内には1938年とあり、記載が異なります。同協会は現在地への移転を1973年としていますが、建物の建築年は未確認です。",
+      "foundedYear": 1936,
+      "descriptionSourceUrl": "https://www.yamada-shoten.com/onlinestore/store.php",
+      "descriptionSourceLabel": "山田書店｜店の公式沿革",
+      "replacesPlaceIds": [
+        "osm-node-3343070908"
+      ]
+    },
+    {
+      "id": "osm-node-3342922517",
+      "osmId": 3342922517,
+      "name": "＠ワンダー",
+      "category": "antiquarian_bookstore",
+      "subcategory": "books",
+      "address": "東京都千代田区神田神保町2-5-4 開拓社ビル1・2F",
+      "website": "https://www.kosho.or.jp/abouts/?id=12011430",
+      "sourceLabel": "日本の古本屋｜＠ワンダーの店舗紹介",
+      "sourceUrl": "https://www.kosho.or.jp/abouts/?id=12011430",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "description": "映画関連品、SF、ミステリなどを扱う古書店。「二十世紀記憶装置」を店のキーワードに掲げています。本だけでなく映画の資料やサブカルチャーの品々を通じて、20世紀の大衆文化を伝える店です。創業年と建物の建築年は、今回の確認資料では確かめられていません。",
+      "foundingDisplay": "創業年未確認",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "日本の古本屋｜＠ワンダーの店舗紹介",
+          "url": "https://www.kosho.or.jp/abouts/?id=12011430"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7561963,
+        35.6957218
+      ],
+      "descriptionSourceUrl": "https://www.kosho.or.jp/abouts/?id=12011430",
+      "descriptionSourceLabel": "日本の古本屋｜＠ワンダーの店舗紹介",
+      "replacesPlaceIds": [
+        "osm-node-3342922517"
+      ]
+    },
+    {
+      "id": "osm-node-1634100108",
+      "osmId": 1634100108,
+      "name": "玉英堂書店",
+      "category": "antiquarian_bookstore",
+      "subcategory": "books",
+      "floor": "0;1",
+      "address": "東京都千代田区神田神保町1-1",
+      "website": "https://gyokueido.com/",
+      "sourceLabel": "玉英堂書店｜創業・神保町への移転・取扱分野",
+      "sourceUrl": "https://gyokueido.com/",
+      "sourceType": "official",
+      "confidence": "confirmed",
+      "description": "本郷湯島天神下で古本と貸本の店として創業し、1926年から神田神保町で営業しています。古写本や古版本、文学作品の初版本、文豪の草稿や書簡などを扱う書店です。書かれた内容だけでなく、著者の筆跡や本そのものの成り立ちを伝える資料が集まります。",
+      "foundingDisplay": "1902年（明治35年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "玉英堂書店｜創業・神保町への移転・取扱分野",
+          "url": "https://gyokueido.com/"
+        },
+        {
+          "label": "日本の古本屋｜所在地と店舗登録情報",
+          "url": "https://www.kosho.or.jp/abouts/?id=12010090"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7602271,
+        35.695831
+      ],
+      "foundedYear": 1902,
+      "descriptionSourceUrl": "https://gyokueido.com/",
+      "descriptionSourceLabel": "玉英堂書店｜創業・神保町への移転・取扱分野",
+      "replacesPlaceIds": [
+        "osm-node-1634100108"
+      ]
+    },
+    {
+      "id": "yukyudo-books",
+      "name": "悠久堂書店",
+      "aliases": [
+        "悠久堂",
+        "YUKYUDOU"
+      ],
+      "category": "antiquarian_bookstore",
+      "subcategory": "古書店",
+      "address": "東京都千代田区神田神保町1-3-2",
+      "foundedYear": 1915,
+      "jinbochoOpenedYear": 1915,
+      "specialty": "美術、中国美術、書道、料理、山岳、動植物",
+      "website": "https://yukyudou.com/aboutus/",
+      "sourceLabel": "悠久堂書店｜店の歴史と各代の専門分野",
+      "sourceUrl": "https://yukyudou.com/aboutus/",
+      "sourceType": "official",
+      "confidence": "confirmed",
+      "osmId": 1634100087,
+      "description": "1915年にこの地で開業。当初は、周辺の大学に通う学生向けの教科書販売が中心でした。2代目は山岳・動植物、3代目は食文化、4代目は美術へと、代を重ねるごとに取扱分野を増やしてきました。店ごとに専門が分かれる神保町の変化が、一軒の書棚の歩みにも表れています。",
+      "foundingDisplay": "1915年（大正4年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "historySources": [
+        {
+          "label": "悠久堂書店｜店の歴史と各代の専門分野",
+          "url": "https://yukyudou.com/aboutus/"
+        },
+        {
+          "label": "日本の古本屋｜店舗登録情報・位置",
+          "url": "https://www.kosho.or.jp/abouts/?id=12010110"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.759977,
+        35.6958427
+      ],
+      "descriptionSourceUrl": "https://yukyudou.com/aboutus/",
+      "descriptionSourceLabel": "悠久堂書店｜店の歴史と各代の専門分野",
+      "replacesPlaceIds": [
+        "yukyudo-books"
+      ]
+    },
+    {
+      "id": "osm-node-3881341809",
+      "osmId": 3881341809,
+      "name": "南洋堂書店",
+      "category": "bookstore",
+      "subcategory": "books",
+      "address": "東京都千代田区神田神保町1-21",
+      "website": "https://nanyodo.com/",
+      "sourceLabel": "南洋堂書店｜取扱書籍と店舗案内",
+      "sourceUrl": "https://nanyodo.com/",
+      "sourceType": "editorial",
+      "confidence": "confirmed",
+      "description": "建築の新刊・古書・洋書を扱う専門書店。地域紙が店員に行った取材では、創業を1926年としています。近隣大学の建築学科とのつながりを背景に、建築分野を専門とする店へ変わっていきました。",
+      "foundingDisplay": "1926年（取材資料による）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "1980年（昭和55年）",
+      "buildingDescription": "1980年、土岐新の設計で建てられたコンクリート打ち放しの建物です。正方形をモチーフとする外観が特徴。2007年には菊地宏が1・2階を改装しました。本を扱う店そのものも、神保町で見られる建築の一つです。",
+      "historySources": [
+        {
+          "label": "南洋堂書店｜取扱書籍と店舗案内",
+          "url": "https://nanyodo.com/"
+        },
+        {
+          "label": "おさんぽ神保町｜店員への取材・創業と建物",
+          "url": "https://osanpo-jimbo.com/info/5002135"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7611147,
+        35.6951991
+      ],
+      "foundedYear": 1926,
+      "buildingCompletedYear": 1980,
+      "descriptionSourceUrl": "https://nanyodo.com/",
+      "descriptionSourceLabel": "南洋堂書店｜取扱書籍と店舗案内",
+      "replacesPlaceIds": [
+        "osm-node-3881341809"
+      ]
+    },
+    {
+      "id": "osm-node-4018933613",
+      "osmId": 4018933613,
+      "name": "文房堂",
+      "category": "retail",
+      "subcategory": "stationery",
+      "address": "東京都千代田区神田神保町1-21-1",
+      "website": "https://www.bumpodo.co.jp/company/",
+      "sourceLabel": "文房堂｜創業・移転・画材製造の歴史",
+      "sourceUrl": "https://www.bumpodo.co.jp/company/history.html",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "description": "小川町の中西屋書店の一部を借りて創業した画材店。1906年に現在のすずらん通りへ移り、1921年には専門家向けの国産油絵具を製造・販売しました。本の街には、絵を描く人のための道具を届けてきた店も残っています。",
+      "foundingDisplay": "1887年（明治20年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "1922年の外壁を保存／1990年改築",
+      "buildingDescription": "すずらん通り側の外壁は1922年のもの。1990年にその外壁を残して、背後の建物本体を建て替えました。筋のあるスクラッチタイル、アーチ窓、窓上のライオンやテラコッタ装飾が見られます。建物全体が1922年のまま残っているわけではありません。",
+      "historySources": [
+        {
+          "label": "文房堂｜創業・移転・画材製造の歴史",
+          "url": "https://www.bumpodo.co.jp/company/history.html"
+        },
+        {
+          "label": "千代田区｜文房堂ビルの竣工・外壁保存",
+          "url": "https://www.city.chiyoda.lg.jp/documents/4200/13-bumbodobiru-r405.pdf"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "coordinates": [
+        139.7609316,
+        35.6952732
+      ],
+      "foundedYear": 1887,
+      "originalFacadeYear": 1922,
+      "buildingRebuiltYear": 1990,
+      "descriptionSourceUrl": "https://www.bumpodo.co.jp/company/history.html",
+      "descriptionSourceLabel": "文房堂｜創業・移転・画材製造の歴史",
+      "replacesPlaceIds": [
+        "osm-node-4018933613"
+      ]
+    },
+    {
+      "id": "sabouru",
+      "name": "さぼうる",
+      "aliases": [
+        "サボウル",
+        "Sabouru"
+      ],
+      "category": "cafe",
+      "subcategory": "純喫茶",
+      "address": "東京都千代田区神田神保町1-11",
+      "foundedYear": 1955,
+      "specialty": "純喫茶、クリームソーダ、軽食",
+      "sourceLabel": "千代田区観光協会｜店名・内装・フロア構成",
+      "sourceUrl": "https://visit-chiyoda.tokyo/app/spot/detail/482",
+      "sourceType": "association",
+      "confidence": "confirmed",
+      "notableReason": "千代田区観光協会公式サイト掲載",
+      "osmId": 1634099746,
+      "description": "神保町駅近くの路地にある、1955年創業の喫茶店。店名はスペイン語の「味」に由来します。創業時のオーナーが内装の構想にも関わり、木彫りの品々が置かれた独特の店内をつくりました。",
+      "descriptionSourceLabel": "千代田区観光協会｜店名・内装・フロア構成",
+      "descriptionSourceUrl": "https://visit-chiyoda.tokyo/app/spot/detail/482",
+      "foundingDisplay": "1955年（昭和30年）",
+      "foundingLabel": "店の創業",
+      "buildingCompletedText": "建築年未確認",
+      "buildingDescription": "入ると少し上がった床と地下へ下りる階段があり、店内は3つのフロアに分かれます。低い天井や近い席の間隔が、奥行きのある空間をつくっています。創業年と現建物の竣工年が同じかは確認できていません。",
+      "historySources": [
+        {
+          "label": "千代田区観光協会｜店名・内装・フロア構成",
+          "url": "https://visit-chiyoda.tokyo/app/spot/detail/482"
+        },
+        {
+          "label": "GOOD LUCK TRIP（店監修）｜1955年創業",
+          "url": "https://www.gltjp.com/ja/directory/item/14176/"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "bookwalkImported": true,
+      "website": "https://visit-chiyoda.tokyo/app/spot/detail/482",
+      "coordinates": [
+        139.7586758,
+        35.6955733
+      ],
+      "replacesPlaceIds": [
+        "sabouru"
+      ]
+    },
+    {
+      "id": "kanda-catholic-church",
+      "name": "カトリック神田教会",
+      "category": "culture",
+      "address": "東京都千代田区西神田1-1-12",
+      "description": "1874年、外国語を教えるラテン学校が神田へ移り、その地に聖堂を設けたことが教会の始まりです。のちの白百合学園や暁星学園につながる教育活動も、教会の敷地を起点としました。神保町の北側に、学校と街の関係を伝える場所があります。",
+      "foundingDisplay": "1874年（明治7年）",
+      "foundingLabel": "教会の創立",
+      "buildingCompletedText": "1928年（昭和3年）",
+      "buildingDescription": "現在の聖堂はマックス・ヒンデルの設計で、1928年に献堂。ルネッサンス・ロマネスク様式を取り入れた建物で、戦災を免れて残りました。明治期の教会創立と、いま見える昭和初期の聖堂を分けてたどれます。",
+      "historySources": [
+        {
+          "label": "神田教会｜創立・学校・聖堂の歴史",
+          "url": "https://catholickandachurch.org/about/church/history/"
+        },
+        {
+          "label": "神田教会｜所在地と交通案内",
+          "url": "https://catholickandachurch.org/contact/access/"
+        }
+      ],
+      "historyCheckedAt": "2026-11-07",
+      "checkedAt": "2026-11-07",
+      "confidence": "confirmed",
+      "bookwalkImported": true,
+      "website": "https://catholickandachurch.org/about/open-hours/",
+      "visitNote": "聖堂は礼拝の場です。見学は公式の公開案内を確認してください。儀式中は見学できない場合があります。",
+      "infoLabel": "公開時間・見学案内",
+      "coordinates": [
+        139.757371,
+        35.699389
+      ],
+      "foundedYear": 1874,
+      "buildingCompletedYear": 1928,
+      "sourceLabel": "神田教会｜創立・学校・聖堂の歴史",
+      "sourceUrl": "https://catholickandachurch.org/about/church/history/",
+      "sourceType": "official",
+      "descriptionSourceUrl": "https://catholickandachurch.org/about/church/history/",
+      "descriptionSourceLabel": "神田教会｜創立・学校・聖堂の歴史",
+      "replacesPlaceIds": []
     }
   ]
 }

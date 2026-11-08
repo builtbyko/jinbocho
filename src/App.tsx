@@ -19,6 +19,14 @@ function yearText(label: string, year?: number) {
   return year ? `${label} ${year}年` : undefined;
 }
 
+function floorText(value?: string) {
+  if (!value) return "";
+  if (/^-?\d+(?:\s*[,;]\s*-?\d+)*$/.test(value)) {
+    return value.split(/[,;]/).map(level => Number(level) < 0 ? `地下${-Number(level)}階` : `${Number(level) + 1}階`).join("・");
+  }
+  return value;
+}
+
 const initialLayers: Record<LayerKey, boolean> = {
   buildings: true,
   antiquarian_bookstore: true,
@@ -107,8 +115,8 @@ function PlaceCard({ place, isSelected, onSelect }: { place: PlaceFeature; isSel
         <strong>{p.name}</strong>
         <small>
           {categoryLabel[p.category]}
-          {p.floor ? ` · ${p.floor}` : ""}
-          {p.foundedYear ? ` · 創業${p.foundedYear}年` : ""}
+          {p.floor ? ` · ${floorText(p.floor)}` : ""}
+          {p.foundingDisplay ? ` · ${p.foundingDisplay}` : p.foundedYear ? ` · 創業${p.foundedYear}年` : ""}
         </small>
         {p.description && <span className="place-card-description">{p.description}</span>}
       </span>
@@ -148,30 +156,43 @@ function DetailPanel({
           <div className="badges">
             <span>{categoryLabel[activePlace.properties.category]}</span>
             <span className={activePlace.properties.confidence === "confirmed" ? "badge-confirmed" : ""}>
-              {activePlace.properties.confidence === "confirmed" ? "公式情報確認" : "OSM参考"}
+              {activePlace.properties.confidence === "confirmed" ? "出典確認" : "OSM参考"}
             </span>
           </div>
+          {activePlace.properties.bookwalkImported && (
+            <dl className="history-dates">
+              <div><dt>{activePlace.properties.foundingLabel ?? "店の創業"}</dt><dd>{activePlace.properties.foundingDisplay}</dd></div>
+              <div><dt>建物の竣工</dt><dd>{activePlace.properties.buildingCompletedText}</dd></div>
+            </dl>
+          )}
+          {activePlace.properties.bookwalkImported && <h3 className="history-heading">この場所の歴史</h3>}
           {(activePlace.properties.description || activePlace.properties.specialty) && (
             <p className="lead place-description">{activePlace.properties.description || activePlace.properties.specialty}</p>
           )}
+          {activePlace.properties.buildingDescription && (
+            <section><h3 className="history-heading">建物について</h3><p className="lead place-description">{activePlace.properties.buildingDescription}</p></section>
+          )}
           <dl className="fact-list">
-            {yearText("創業", activePlace.properties.foundedYear) && <><dt>店の歴史</dt><dd>{yearText("創業", activePlace.properties.foundedYear)}</dd></>}
+            {!activePlace.properties.foundingDisplay && yearText("創業", activePlace.properties.foundedYear) && <><dt>店の歴史</dt><dd>{yearText("創業", activePlace.properties.foundedYear)}</dd></>}
             {yearText("神保町で開業", activePlace.properties.jinbochoOpenedYear) && <><dt>神保町</dt><dd>{yearText("開業", activePlace.properties.jinbochoOpenedYear)}</dd></>}
             {yearText("現在地へ移転", activePlace.properties.currentLocationSince) && <><dt>現在地</dt><dd>{yearText("移転", activePlace.properties.currentLocationSince)}</dd></>}
-            {activePlace.properties.floor && <><dt>階</dt><dd>{activePlace.properties.floor}</dd></>}
+            {activePlace.properties.floor && <><dt>階</dt><dd>{floorText(activePlace.properties.floor)}</dd></>}
             {activePlace.properties.address && <><dt>住所</dt><dd>{activePlace.properties.address}</dd></>}
             {activePlace.properties.hours && <><dt>営業時間</dt><dd>{activePlace.properties.hours}</dd></>}
             {activePlace.properties.notableReason && <><dt>掲載根拠</dt><dd>{activePlace.properties.notableReason}</dd></>}
           </dl>
           {activePlace.properties.note && <p className="detail-note">{activePlace.properties.note}</p>}
+          {activePlace.properties.visitNote && <p className="detail-note">{activePlace.properties.visitNote}</p>}
           <div className="source-box">
             <span>出典 · {activePlace.properties.observedAt}確認</span>
-            <a href={activePlace.properties.sourceUrl} target="_blank" rel="noreferrer">{activePlace.properties.sourceLabel} ↗</a>
-            {activePlace.properties.descriptionSourceUrl && activePlace.properties.descriptionSourceUrl !== activePlace.properties.sourceUrl && (
+            {activePlace.properties.historySources?.length ? activePlace.properties.historySources.map(source => (
+              <a href={source.url} key={source.url} target="_blank" rel="noreferrer">{source.label} ↗</a>
+            )) : <a href={activePlace.properties.sourceUrl} target="_blank" rel="noreferrer">{activePlace.properties.sourceLabel} ↗</a>}
+            {!activePlace.properties.historySources?.length && activePlace.properties.descriptionSourceUrl && activePlace.properties.descriptionSourceUrl !== activePlace.properties.sourceUrl && (
               <a href={activePlace.properties.descriptionSourceUrl} target="_blank" rel="noreferrer">{activePlace.properties.descriptionSourceLabel ?? "紹介の出典"} ↗</a>
             )}
-            {activePlace.properties.website && activePlace.properties.website !== activePlace.properties.sourceUrl && activePlace.properties.website !== activePlace.properties.descriptionSourceUrl && (
-              <a href={activePlace.properties.website} target="_blank" rel="noreferrer">店舗サイト ↗</a>
+            {activePlace.properties.website && activePlace.properties.website !== activePlace.properties.sourceUrl && activePlace.properties.website !== activePlace.properties.descriptionSourceUrl && !activePlace.properties.historySources?.some(source => source.url === activePlace.properties.website) && (
+              <a href={activePlace.properties.website} target="_blank" rel="noreferrer">{activePlace.properties.infoLabel ?? "案内・店舗情報"} ↗</a>
             )}
           </div>
         </div>
@@ -212,7 +233,7 @@ function AboutPanel({ data, onClose }: { data: AtlasData; onClose: () => void })
         <button className="icon-button" type="button" onClick={onClose} aria-label="説明を閉じる">×</button>
       </div>
       <div className="about-body">
-        <p className="lead">神田神保町一〜三丁目の建物と店舗を表示しています。左の一覧で見たいレイヤーを選び、建物を押すと店の詳細が開きます。</p>
+        <p className="lead">神田神保町一〜三丁目の建物と店舗、周辺の歴史ある場所を表示しています。建物や地点を押すと詳細が開きます。「歴史・建物の解説」には、創業・創立年と建築年代を区別して調べた15か所をまとめています。</p>
         <h3>データの注意点</h3>
         <ul>{data.summary.caveats.map((item) => <li key={item}>{item}</li>)}</ul>
         <div className="source-box">
@@ -278,7 +299,7 @@ export default function App() {
     if (!data || normalize(query).length < 1) return [];
     const needle = normalize(query);
     return data.places.features
-      .filter(({ properties: p }) => normalize([p.name, ...(p.aliases ?? []), p.specialty ?? "", p.description ?? "", p.address ?? ""].join(" ")).includes(needle))
+      .filter(({ properties: p }) => normalize([p.name, ...(p.aliases ?? []), p.specialty ?? "", p.description ?? "", p.buildingDescription ?? "", p.foundingDisplay ?? "", p.buildingCompletedText ?? "", p.address ?? ""].join(" ")).includes(needle))
       .sort((a, b) => Number(b.properties.confidence === "confirmed") - Number(a.properties.confidence === "confirmed"))
       .slice(0, 8);
   }, [data, query]);
@@ -334,26 +355,26 @@ export default function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-block">
-          <h1>神保町マップ</h1>
-          <span className="brand-jp">店と建物</span>
+          <h1>神保町の地図</h1>
+          <span className="brand-jp">古書店・建物・歴史</span>
         </div>
         <div className="topbar-actions">
           <button type="button" className="text-button" onClick={() => { setLegendOpen(false); setAboutOpen(true); }}>データについて</button>
-          <button type="button" className="mobile-menu" onClick={() => setSidebarOpen(true)} aria-label="レイヤーを開く">レイヤー</button>
+          <button type="button" className="mobile-menu" onClick={() => setSidebarOpen(true)} aria-label="場所とレイヤーを開く">探す</button>
         </div>
       </header>
 
       <div className="workspace">
         <aside className={`sidebar ${sidebarOpen ? "is-open" : ""}`}>
           <div className="sidebar-mobile-head">
-            <strong>レイヤー</strong>
+            <strong>場所とレイヤー</strong>
             <button type="button" className="icon-button" onClick={() => setSidebarOpen(false)} aria-label="レイヤーを閉じる">×</button>
           </div>
           <div className="search-block">
-            <label htmlFor="place-search">店を探す</label>
+            <label htmlFor="place-search">場所を探す</label>
             <div className="search-input-wrap">
               <span aria-hidden="true">⌕</span>
-              <input id="place-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="店名・特徴・住所" autoComplete="off" />
+              <input id="place-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="名前・歴史・建築年" autoComplete="off" />
               {query && <button type="button" onClick={() => setQuery("")} aria-label="検索を消去">×</button>}
             </div>
             {query && (
@@ -364,6 +385,13 @@ export default function App() {
               </div>
             )}
           </div>
+
+          <details className="history-place-list">
+            <summary>歴史・建物の解説 <span>15か所</span></summary>
+            {data.places.features.filter(place => place.properties.bookwalkImported).map(place => (
+              <PlaceCard key={place.properties.id} place={place} isSelected={selectedPlaceId === place.properties.id} onSelect={() => selectPlace(place.properties.id)} />
+            ))}
+          </details>
 
           <section className="control-section">
             <h2>レイヤー</h2>
@@ -402,6 +430,7 @@ export default function App() {
             selectedBuildingId={selectedBuildingId}
             focusPlaceId={focusPlaceId}
             onSelectBuilding={(id) => { setSelectedPlaceId(undefined); setSelectedBuildingId(id); if (id) setLegendOpen(false); }}
+            onSelectPlace={(id) => selectPlace(id)}
           />
           <MapLegend visibleLayers={visibleLayers} open={legendOpen} onToggle={() => setLegendOpen((value) => !value)} />
           <DetailPanel

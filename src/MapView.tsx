@@ -19,6 +19,7 @@ type Props = {
   selectedBuildingId?: string;
   focusPlaceId?: string;
   onSelectBuilding: (id?: string) => void;
+  onSelectPlace: (id: string) => void;
 };
 
 const USE_COLOR: ExpressionSpecification = [
@@ -119,6 +120,10 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, 
   map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
   map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
   (map.getSource("shop-names") as GeoJSONSource).setData(buildingLabelData(data, visibleLayers));
+  if (map.getLayer("standalone-places")) {
+    map.setFilter("standalone-places", visibleCategories);
+    map.setFilter("standalone-labels", visibleCategories);
+  }
 }
 
 function syncBuildingSelection(map: MapLibreMap, selectedBuildingId?: string) {
@@ -134,13 +139,14 @@ export default function MapView({
   selectedBuildingId,
   focusPlaceId,
   onSelectBuilding,
+  onSelectPlace,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap>();
-  const callbacksRef = useRef({ onSelectBuilding });
+  const callbacksRef = useRef({ onSelectBuilding, onSelectPlace });
   const visibleLayersRef = useRef(visibleLayers);
   const selectedBuildingIdRef = useRef(selectedBuildingId);
-  callbacksRef.current = { onSelectBuilding };
+  callbacksRef.current = { onSelectBuilding, onSelectPlace };
   visibleLayersRef.current = visibleLayers;
   selectedBuildingIdRef.current = selectedBuildingId;
 
@@ -163,6 +169,7 @@ export default function MapView({
         [139.767, 35.7035],
       ],
       attributionControl: false,
+      locale: { "GeolocateControl.FindMyLocation": "現在地を表示", "GeolocateControl.TrackLocation": "現在地を追従", "GeolocateControl.LocationNotAvailable": "現在地を取得できません" },
       style: {
         version: 8,
         sources: {},
@@ -176,6 +183,12 @@ export default function MapView({
 
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+    map.addControl(new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true, timeout: 20000 },
+      trackUserLocation: true,
+      showAccuracyCircle: true,
+      fitBoundsOptions: { maxZoom: 17.5 },
+    }), "bottom-right");
     map.addControl(
       new maplibregl.AttributionControl({
         compact: true,
@@ -206,6 +219,11 @@ export default function MapView({
       map.addSource("antiquarian-eras", { type: "geojson", data: antiquarianEraBuildings(data) });
       map.addSource("alleys", { type: "geojson", data: data.alleys });
       map.addSource("shop-names", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      map.addSource("standalone-places", { type: "geojson", data: {
+        type: "FeatureCollection",
+        features: data.places.features.filter(f => f.properties.bookwalkImported && !f.properties.buildingId)
+          .map(f => ({...f, properties: {...f.properties, primaryUse: f.properties.category}})),
+      } });
 
       map.addLayer({
         id: "scope-mask",
@@ -397,12 +415,21 @@ export default function MapView({
         },
       });
 
+      // Curated sites outside the footprint coverage remain directly selectable.
+      map.addLayer({id:"standalone-places",type:"circle",source:"standalone-places",paint:{
+        "circle-radius":7,"circle-color":"#b29a45","circle-stroke-color":"#fff","circle-stroke-width":2,
+      }});
+      map.addLayer({id:"standalone-labels",type:"symbol",source:"standalone-places",layout:{
+        "text-field":["get","name"],"text-font":["Noto Sans CJK JP","Yu Gothic","Meiryo","sans-serif"],
+        "text-size":12,"text-anchor":"left","text-offset":[1,0],"text-max-width":12,
+      },paint:{"text-color":"#26352f","text-halo-color":"#fffefa","text-halo-width":1.5}});
+
       // Apply any UI changes made while the asynchronous style was loading.
       syncLayers(map, visibleLayersRef.current, data);
       syncBuildingSelection(map, selectedBuildingIdRef.current);
 
       map.on("mousemove", (event) => {
-        const building = map.queryRenderedFeatures(event.point, { layers: ["shop-names-confirmed", "shop-names", "building-hit"] })[0];
+        const building = map.queryRenderedFeatures(event.point, { layers: ["standalone-places", "standalone-labels", "shop-names-confirmed", "shop-names", "building-hit"] })[0];
         map.getCanvas().style.cursor = building ? "pointer" : "grab";
         map.setFilter("building-hover", ["==", ["get", "id"], getFeatureId(building) ?? ""]);
       });
@@ -411,7 +438,12 @@ export default function MapView({
         map.setFilter("building-hover", ["==", ["get", "id"], ""]);
       });
       map.on("click", (event: MapMouseEvent) => {
-        const building = map.queryRenderedFeatures(event.point, { layers: ["shop-names-confirmed", "shop-names", "building-hit"] })[0];
+        const building = map.queryRenderedFeatures(event.point, { layers: ["standalone-places", "standalone-labels", "shop-names-confirmed", "shop-names", "building-hit"] })[0];
+        if (building?.layer.id.startsWith("standalone-")) {
+          const id = getFeatureId(building);
+          if (id) callbacksRef.current.onSelectPlace(id);
+          return;
+        }
         callbacksRef.current.onSelectBuilding(getFeatureId(building));
       });
     });
@@ -439,7 +471,12 @@ export default function MapView({
     if (!map || !focusPlaceId) return;
     const feature = placeById.get(focusPlaceId);
     if (!feature) return;
-    map.flyTo({ center: feature.geometry.coordinates as [number, number], zoom: 18.25, duration: 900, essential: true });
+    const mobile = window.innerWidth <= 960;
+    const padding = mobile
+      ? { top: Math.round(map.getContainer().clientHeight * .48), bottom: 30, left: 20, right: 20 }
+      : { top: 30, bottom: 30, left: 30, right: 400 };
+    map.flyTo({ center: feature.geometry.coordinates as [number, number], zoom: 18.25, padding,
+      duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700 });
   }, [focusPlaceId, placeById]);
 
   return <div ref={containerRef} className="map-canvas" aria-label="神保町の建物を選んで店舗を調べる地図" />;

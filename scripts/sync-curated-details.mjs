@@ -23,7 +23,8 @@ for (const record of curated.places) {
   if (Boolean(record.descriptionSourceUrl) !== Boolean(record.descriptionSourceLabel)) {
     throw new Error(`${record.id}: 紹介文の出典URLと名称は両方必要です`);
   }
-  Object.assign(feature.properties, record, { observedAt: curated.checkedAt });
+  const { coordinates, replacesPlaceIds, checkedAt, ...details } = record;
+  Object.assign(feature.properties, details, { observedAt: checkedAt ?? curated.checkedAt });
 }
 
 places.metadata.curatedCheckedAt = curated.checkedAt;

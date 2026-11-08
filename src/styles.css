@@ -1404,3 +1404,13 @@ a:focus-visible {
     max-height: min(45vh, calc(100% - 24px));
   }
 }
+
+.history-place-list{padding:15px 12px;border-bottom:1px solid var(--line)}
+.history-place-list>summary{font-size:13px;font-weight:700;cursor:pointer;padding:4px}
+.history-place-list>summary span{font-size:11px;font-weight:400;color:var(--muted);margin-left:6px}
+.history-place-list .place-card{margin-top:6px}
+.history-place-list .place-card-description{display:none}
+.history-dates{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 0;margin:14px 0 20px;border-block:1px solid var(--line)}
+.history-dates dt{font-size:11px;color:var(--muted);margin-bottom:7px}.history-dates dd{margin:0;font-size:13px;font-weight:650;line-height:1.7}
+.history-heading{font-size:12px;margin:18px 0 6px}.place-description{line-height:1.9}
+@media(max-width:960px){.detail-panel{padding-bottom:10px}.map-wrap:has(.detail-panel) .map-legend{display:none}}

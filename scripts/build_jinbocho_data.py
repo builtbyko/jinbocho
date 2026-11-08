@@ -347,13 +347,18 @@ def match_curated(
         if point is None:
             unmatched.append(record["id"])
             continue
+        if record.get("coordinates"):
+            point = Point(record["coordinates"])
+        used_osm_ids.update(record.get("replacesPlaceIds", []))
         props = {
             **record,
             "osmId": osm_id,
             "era": era_for_year(record.get("foundedYear")),
-            "observedAt": curated.get("checkedAt", OBSERVED_DATE),
+            "observedAt": record.get("checkedAt", curated.get("checkedAt", OBSERVED_DATE)),
         }
         props.pop("coordinates", None)
+        props.pop("replacesPlaceIds", None)
+        props.pop("checkedAt", None)
         curated_features.append({"type": "Feature", "properties": props, "geometry": mapping(point)})
 
     remaining = [feature for feature in osm_places if feature["properties"]["id"] not in used_osm_ids]

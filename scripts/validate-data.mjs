@@ -64,8 +64,30 @@ for (const record of curated.places) {
   assert(record.description?.trim(), `curated ${record.id} lacks a short introduction`);
   const published = places.features.find((feature) => feature.properties.id === record.id)?.properties;
   assert(published?.description === record.description, `curated ${record.id} is not synced to the map`);
-  assert(published?.observedAt === curated.checkedAt, `curated ${record.id} has an outdated checked date`);
+  assert(published?.observedAt === (record.checkedAt ?? curated.checkedAt), `curated ${record.id} has an outdated checked date`);
 }
+
+const migration = read("data/curated/bookwalk-migration.json");
+assert(migration.records.length === 15, "bookwalk migration must retain all 15 places");
+for (const entry of migration.records) {
+  const matches = places.features.filter(f => f.properties.id === entry.targetId);
+  assert(matches.length === 1, `migrated ${entry.targetId} must exist exactly once`);
+  const p = matches[0].properties;
+  assert(p.foundingDisplay && p.buildingCompletedText && p.historySources?.length, `migrated ${p.id} lacks dates or sources`);
+  assert(p.historySources.every(s => /^https:\/\//.test(s.url) && s.label), `migrated ${p.id} has an invalid source`);
+}
+const byPlaceId = new Map(places.features.map(f => [f.properties.id, f.properties]));
+const byBuildingId = new Map(buildings.features.map(f => [f.properties.id, f.properties]));
+for (const {properties: p} of places.features) {
+  if (p.buildingId) assert(byBuildingId.get(p.buildingId)?.placeIds.includes(p.id), `${p.id}: building tenant index is stale`);
+}
+for (const {properties: b} of buildings.features) {
+  assert(b.placeCount === b.placeIds.length, `${b.id}: tenant count mismatch`);
+  assert(b.placeIds.every(id => byPlaceId.get(id)?.buildingId === b.id), `${b.id}: missing or mismatched tenant`);
+}
+const facade = places.features.find(f => f.properties.bookwalkImported && f.properties.name === "文房堂")?.properties;
+assert(facade?.originalFacadeYear === 1922 && facade?.buildingRebuiltYear === 1990 && !facade?.buildingCompletedYear,
+  "文房堂 must distinguish the preserved facade from the rebuilt building");
 
 assert(summary.buildingCount === buildings.features.length, "summary buildingCount mismatch");
 assert(summary.placeCount === places.features.length, "summary placeCount mismatch");

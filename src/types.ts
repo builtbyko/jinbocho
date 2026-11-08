@@ -58,6 +58,18 @@ export type PlaceProperties = {
   floor?: string;
   address?: string;
   foundedYear?: number;
+  foundingDisplay?: string;
+  foundingLabel?: string;
+  buildingCompletedText?: string;
+  buildingCompletedYear?: number;
+  originalFacadeYear?: number;
+  buildingRebuiltYear?: number;
+  buildingDescription?: string;
+  historySources?: { label: string; url: string }[];
+  historyCheckedAt?: string;
+  bookwalkImported?: boolean;
+  visitNote?: string;
+  infoLabel?: string;
   jinbochoOpenedYear?: number;
   currentLocationSince?: number;
   era: string;

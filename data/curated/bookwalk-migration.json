@@ -1,0 +1,111 @@
+{
+  "source": "https://github.com/builtbyko/jinbocho.book",
+  "sourceRevision": "bfd734a6b21dcffb1a968be22a2da9b606aae454",
+  "migratedAt": "2026-11-08",
+  "records": [
+    {
+      "sourceId": "seishindo",
+      "targetId": "osm-node-13108052162",
+      "replacedIds": [
+        "osm-node-13108052162",
+        "osm-node-6768292056"
+      ]
+    },
+    {
+      "sourceId": "kitazawa",
+      "targetId": "kitazawa-bookstore",
+      "replacedIds": [
+        "kitazawa-bookstore"
+      ]
+    },
+    {
+      "sourceId": "yaguchi",
+      "targetId": "yaguchi-shoten",
+      "replacedIds": [
+        "yaguchi-shoten"
+      ]
+    },
+    {
+      "sourceId": "isseido",
+      "targetId": "isseido-booksellers",
+      "replacedIds": [
+        "isseido-booksellers"
+      ]
+    },
+    {
+      "sourceId": "komiyama",
+      "targetId": "komiyama-bookstore",
+      "replacedIds": [
+        "komiyama-bookstore"
+      ]
+    },
+    {
+      "sourceId": "tamura",
+      "targetId": "osm-node-1634100115",
+      "replacedIds": [
+        "osm-node-1634100115"
+      ]
+    },
+    {
+      "sourceId": "ohya",
+      "targetId": "osm-node-1634100079",
+      "replacedIds": [
+        "osm-node-1634100079"
+      ]
+    },
+    {
+      "sourceId": "yamada",
+      "targetId": "osm-node-3343070908",
+      "replacedIds": [
+        "osm-node-3343070908"
+      ]
+    },
+    {
+      "sourceId": "wonder",
+      "targetId": "osm-node-3342922517",
+      "replacedIds": [
+        "osm-node-3342922517"
+      ]
+    },
+    {
+      "sourceId": "gyokueido",
+      "targetId": "osm-node-1634100108",
+      "replacedIds": [
+        "osm-node-1634100108"
+      ]
+    },
+    {
+      "sourceId": "yukyudo",
+      "targetId": "yukyudo-books",
+      "replacedIds": [
+        "yukyudo-books"
+      ]
+    },
+    {
+      "sourceId": "nanyodo",
+      "targetId": "osm-node-3881341809",
+      "replacedIds": [
+        "osm-node-3881341809"
+      ]
+    },
+    {
+      "sourceId": "bumpodo",
+      "targetId": "osm-node-4018933613",
+      "replacedIds": [
+        "osm-node-4018933613"
+      ]
+    },
+    {
+      "sourceId": "sabouru",
+      "targetId": "sabouru",
+      "replacedIds": [
+        "sabouru"
+      ]
+    },
+    {
+      "sourceId": "kandachurch",
+      "targetId": "kanda-catholic-church",
+      "replacedIds": []
+    }
+  ]
+}
