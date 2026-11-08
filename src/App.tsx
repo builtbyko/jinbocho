@@ -274,6 +274,16 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
+    const closePanels = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setSidebarOpen(false); setAboutOpen(false); setLegendOpen(false);
+      setSelectedBuildingId(undefined); setSelectedPlaceId(undefined);
+    };
+    window.addEventListener("keydown", closePanels);
+    return () => window.removeEventListener("keydown", closePanels);
+  }, []);
+
+  useEffect(() => {
     loadAtlasData().then(setData).catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "データを読み込めませんでした"));
   }, []);
 
@@ -387,7 +397,8 @@ export default function App() {
           </div>
 
           <details className="history-place-list">
-            <summary>歴史・建物の解説 <span>15か所</span></summary>
+            <summary>歴史・建物の解説 <span>{data.places.features.filter(place => place.properties.bookwalkImported).length}か所</span></summary>
+            <p className="history-list-note">地図の「i」が目印です。場所を選ぶと解説が開きます。</p>
             {data.places.features.filter(place => place.properties.bookwalkImported).map(place => (
               <PlaceCard key={place.properties.id} place={place} isSelected={selectedPlaceId === place.properties.id} onSelect={() => selectPlace(place.properties.id)} />
             ))}
@@ -431,6 +442,7 @@ export default function App() {
             focusPlaceId={focusPlaceId}
             onSelectBuilding={(id) => { setSelectedPlaceId(undefined); setSelectedBuildingId(id); if (id) setLegendOpen(false); }}
             onSelectPlace={(id) => selectPlace(id)}
+            onOverview={() => { setSelectedBuildingId(undefined); setSelectedPlaceId(undefined); setAboutOpen(false); setLegendOpen(false); }}
           />
           <MapLegend visibleLayers={visibleLayers} open={legendOpen} onToggle={() => setLegendOpen((value) => !value)} />
           <DetailPanel

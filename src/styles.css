@@ -1440,3 +1440,10 @@ a:focus-visible {
 }
 
 .user-location-dot{width:18px;height:18px;border:3px solid white;border-radius:50%;background:#3979d6;box-shadow:0 0 0 2px #3979d650,0 2px 8px #0003}
+
+/* Finish the reading hierarchy without crowding the map. */
+.history-list-note{margin:12px 4px 8px;color:var(--muted);font-size:12px;line-height:1.7}
+button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #3979d6;outline-offset:3px}
+.walking-controls button{touch-action:manipulation}
+.detail-note{font-size:12px;line-height:1.8}
+@media(max-width:960px){.detail-head{padding-top:10px}.badges span{font-size:11px}.source-box span{font-size:11px}.about-body p,.about-body li{font-size:13px;line-height:1.8}}

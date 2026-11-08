@@ -20,6 +20,7 @@ type Props = {
   focusPlaceId?: string;
   onSelectBuilding: (id?: string) => void;
   onSelectPlace: (id: string) => void;
+  onOverview: () => void;
 };
 
 const USE_COLOR: ExpressionSpecification = [
@@ -118,7 +119,10 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, 
   );
   if (map.getLayer("history-markers")) {
     for (const id of ["history-hit","history-markers","history-symbols"]) map.setFilter(id, visibleCategories);
-    const enabledIds=data.places.features.filter(f=>f.properties.bookwalkImported && f.properties.buildingId && (visibleLayers.buildings || (f.properties.category === "antiquarian_bookstore" ? visibleLayers.antiquarian_bookstore : f.properties.category === "bookstore" ? visibleLayers.bookstore : f.properties.category === "cafe" ? visibleLayers.cafe : visibleLayers.other))).map(f=>f.properties.buildingId!);
+    const enabledIds = data.places.features.filter(({properties:p}) => {
+      const layer = ["antiquarian_bookstore","bookstore","cafe","restaurant"].includes(p.category) ? p.category as LayerKey : "other";
+      return p.bookwalkImported && p.buildingId && visibleLayers[layer];
+    }).map(f=>f.properties.buildingId!);
     map.setFilter("history-buildings",["in",["get","id"],["literal",enabledIds]]);
   }
   const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
@@ -145,6 +149,7 @@ export default function MapView({
   focusPlaceId,
   onSelectBuilding,
   onSelectPlace,
+  onOverview,
 }: Props) {
   const [locationStatus, setLocationStatus] = useState("");
   const [locating, setLocating] = useState(false);
@@ -152,9 +157,16 @@ export default function MapView({
   const markerRef = useRef<maplibregl.Marker>();
   const followRef = useRef(false);
   const readyRef = useRef(false);
+  const firstFixRef = useRef(true);
   const overview = () => {
     followRef.current = false;
-    mapRef.current?.flyTo({center:[139.7572,35.69625],zoom:16.35,padding:{top:0,bottom:0,left:0,right:0},duration:500});
+    onOverview();
+    const bounds = new maplibregl.LngLatBounds();
+    data.places.features.filter(f => f.properties.bookwalkImported).forEach(f => bounds.extend(f.geometry.coordinates as [number, number]));
+    mapRef.current?.fitBounds(bounds, {
+      padding: {top:105,bottom:70,left:35,right:55}, maxZoom:16.35,
+      duration:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 500,
+    });
   };
   const locate = () => {
     if (watchRef.current !== undefined) {
@@ -162,6 +174,8 @@ export default function MapView({
       watchRef.current = undefined;
       followRef.current = false;
       setLocating(false);
+      markerRef.current?.remove(); markerRef.current=undefined;
+      (mapRef.current?.getSource("location-accuracy") as GeoJSONSource | undefined)?.setData({type:"FeatureCollection",features:[]});
       setLocationStatus("現在地の更新を停止しました");
       return;
     }
@@ -170,6 +184,8 @@ export default function MapView({
     }
     if (!readyRef.current) { setLocationStatus("地図を読み込んでいます。少し待ってから押してください"); return; }
     followRef.current = true;
+    firstFixRef.current = true;
+    onOverview();
     setLocating(true);
     setLocationStatus("現在地を取得中。位置情報の利用を許可してください");
     watchRef.current = navigator.geolocation.watchPosition(position => {
@@ -187,12 +203,15 @@ export default function MapView({
         return [lng+Math.cos(a)*accuracy/(111320*Math.cos(lat*Math.PI/180)),lat+Math.sin(a)*accuracy/111320];
       });
       (map.getSource("location-accuracy") as GeoJSONSource).setData({type:"Feature",properties:{},geometry:{type:"Polygon",coordinates:[ring]}});
-      if (followRef.current) map.easeTo({center:[lng,lat],zoom:17.5,padding:{top:0,bottom:0,left:0,right:0},duration:500});
+      if (followRef.current) map.easeTo({center:[lng,lat],...(firstFixRef.current ? {zoom:17.5} : {}),padding:{top:0,bottom:0,left:0,right:0},duration:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 500});
+      firstFixRef.current = false;
       const outside=lng<139.747||lng>139.767||lat<35.689||lat>35.7035;
       setLocationStatus(`現在地を表示中 · 精度 約${Math.round(accuracy)}m。${outside ? "神保町の外です。「全体」で地図に戻れます" : "地図を動かすと追従を止めます"}`);
     },error => {
       if (watchRef.current !== undefined) navigator.geolocation.clearWatch(watchRef.current);
       watchRef.current=undefined; setLocating(false); followRef.current=false;
+      markerRef.current?.remove(); markerRef.current=undefined;
+      (mapRef.current?.getSource("location-accuracy") as GeoJSONSource | undefined)?.setData({type:"FeatureCollection",features:[]});
       setLocationStatus(error.code===1 ? "位置情報が許可されていません。ブラウザのサイト設定で許可してください" : error.code===3 ? "取得に時間がかかっています。屋外で再度お試しください" : "現在地を取得できません。端末の位置情報設定を確認してください");
     },{enableHighAccuracy:true,timeout:20000,maximumAge:10000});
   };
@@ -479,6 +498,9 @@ export default function MapView({
         "text-field":["get","name"],"text-font":["Noto Sans CJK JP","Yu Gothic","Meiryo","sans-serif"],
         "text-size":12,"text-anchor":"left","text-offset":[1,0],"text-max-width":12,
       },paint:{"text-color":"#26352f","text-halo-color":"#fffefa","text-halo-width":1.5}});
+
+      // Keep the same explanation marker above standalone site symbols too.
+      for (const id of ["history-hit", "history-markers", "history-symbols"]) map.moveLayer(id);
 
       // Apply any UI changes made while the asynchronous style was loading.
       syncLayers(map, visibleLayersRef.current, data);
