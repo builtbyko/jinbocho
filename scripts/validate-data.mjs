@@ -63,6 +63,15 @@ for (const record of curated.places) {
   assert(record.sourceUrl && record.sourceLabel && record.sourceType, `curated ${record.id} lacks provenance`);
   assert(record.description?.trim(), `curated ${record.id} lacks a short introduction`);
   const published = places.features.find((feature) => feature.properties.id === record.id)?.properties;
+  if (record.lookFor) {
+    assert(published?.lookFor === record.lookFor && /^https:\/\//.test(record.lookForSourceUrl), `${record.id}: look-for text or source is missing`);
+  }
+  if (record.photo) {
+    const photo = record.photo;
+    assert(/^photos\/[a-z0-9.-]+$/.test(photo.src) && fs.existsSync(path.join(root,"public",photo.src)), `${record.id}: photo asset is missing`);
+    assert(photo.author && photo.license && photo.takenAt && /^https:\/\//.test(photo.sourceUrl), `${record.id}: photo attribution is incomplete`);
+    assert(JSON.stringify(published.photo) === JSON.stringify(photo), `${record.id}: photo is not synced`);
+  }
   assert(published?.description === record.description, `curated ${record.id} is not synced to the map`);
   assert(published?.observedAt === (record.checkedAt ?? curated.checkedAt), `curated ${record.id} has an outdated checked date`);
 }

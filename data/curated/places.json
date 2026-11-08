@@ -180,7 +180,10 @@
       "replacesPlaceIds": [
         "osm-node-13108052162",
         "osm-node-6768292056"
-      ]
+      ],
+      "lookFor": "黄色い外壁の細い縦筋と、入口の上にある青い瓦の小庇に注目。1959年の建物が、戦前の看板建築の形を受け継いでいます。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://www.city.chiyoda.lg.jp/documents/4200/14-seishindoshoten-r405.pdf"
     },
     {
       "id": "kitazawa-bookstore",
@@ -222,7 +225,21 @@
       "descriptionSourceLabel": "日本古書籍商協会｜北澤書店の来歴",
       "replacesPlaceIds": [
         "kitazawa-bookstore"
-      ]
+      ],
+      "lookFor": "洋書を扱う店として、文学・歴史・哲学など分野の幅に注目。本の言語から、神保町と海外の学問のつながりをたどれます。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://abaj.gr.jp/shop_info.php?shopid=8",
+      "photo": {
+        "src": "photos/kitazawa-bookstore.jpg",
+        "alt": "北沢書店の外観（2006年撮影）",
+        "author": "Lombroso",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File%3AKitazawa%20Foreign%20Bookstore%2C%20at%20Kanda-Jinbocho.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kitazawa_Foreign_Bookstore,_at_Kanda-Jinbocho.jpg",
+        "takenAt": "2006年",
+        "note": "2006年の北沢ビルの外観。当時の1階の店舗表示は現在と異なります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "yaguchi-shoten",
@@ -268,7 +285,21 @@
       "descriptionSourceLabel": "矢口書店｜店の略史",
       "replacesPlaceIds": [
         "yaguchi-shoten"
-      ]
+      ],
+      "lookFor": "正面の店構えと、映画・演劇の看板を見比べてみてください。昔からの建物で扱う本が変わった、店の歩みを読み取れます。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://yaguchishoten.jp/about/",
+      "photo": {
+        "src": "photos/yaguchi-shoten.jpg",
+        "alt": "矢口書店の外観（2006年撮影）",
+        "author": "Lombroso",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File%3AYaguchi%20Shoten%2C%20at%20Kanda-Jinbocho.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yaguchi_Shoten,_at_Kanda-Jinbocho.jpg",
+        "takenAt": "2006年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "isseido-booksellers",
@@ -318,7 +349,21 @@
       "buildingCompletedYear": 1931,
       "replacesPlaceIds": [
         "isseido-booksellers"
-      ]
+      ],
+      "lookFor": "1階の石張りと上階のタイルの違い、深緑の装飾、入口上の金文字のステンドグラスを見上げてみてください。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://www.isseido-books.co.jp/building/",
+      "photo": {
+        "src": "photos/isseido-booksellers.webp",
+        "alt": "一誠堂書店の外観（2026年撮影）",
+        "author": "のののぶ",
+        "license": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E4%B8%80%E8%AA%A0%E5%A0%82_%E5%A4%96%E8%A6%B3.webp",
+        "takenAt": "2026年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "komiyama-bookstore",
@@ -360,7 +405,10 @@
       "descriptionSourceLabel": "小宮山書店｜創立と現在の取扱分野",
       "replacesPlaceIds": [
         "komiyama-bookstore"
-      ]
+      ],
+      "lookFor": "写真集・美術・ファッションを扱う本屋という視点で眺めてみてください。本と写真・アート作品の境目に、店の特色があります。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://www.book-komiyama.co.jp/about/index.php"
     },
     {
       "id": "osm-node-1634100115",
@@ -401,7 +449,21 @@
       "descriptionSourceLabel": "専修大学｜神保町古書店街の研究・表6-1",
       "replacesPlaceIds": [
         "osm-node-1634100115"
-      ]
+      ],
+      "lookFor": "日本の文学と、フランス語・ドイツ語の本を扱う専門性に注目。普及した本だけでなく、初版本や装飾本も古書店の仕事です。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://senshu-u.repo.nii.ac.jp/record/13244/files/3051_0544_02.pdf",
+      "photo": {
+        "src": "photos/osm-node-1634100115.jpg",
+        "alt": "田村書店の外観（2015年撮影）",
+        "author": "運転太郎",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E7%94%B0%E6%9D%91%E6%9B%B8%E5%BA%97_-_panoramio_(1).jpg",
+        "takenAt": "2015年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "osm-node-1634100079",
@@ -445,7 +507,21 @@
       "descriptionSourceLabel": "大屋書房｜日本古書籍商協会ブックフェア",
       "replacesPlaceIds": [
         "osm-node-1634100079"
-      ]
+      ],
+      "lookFor": "江戸の地図や浮世絵、和本が手がかり。古地図に出てくる地名を今の街と重ねると、通りの見え方が変わります。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://ohya.abaj.gr.jp/",
+      "photo": {
+        "src": "photos/osm-node-1634100079.jpg",
+        "alt": "大屋書房の外観（2015年撮影）",
+        "author": "運転太郎",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E5%B1%8B%E6%9B%B8%E6%88%BF_-_panoramio.jpg",
+        "takenAt": "2015年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "osm-node-3343070908",
@@ -487,7 +563,21 @@
       "descriptionSourceLabel": "山田書店｜店の公式沿革",
       "replacesPlaceIds": [
         "osm-node-3343070908"
-      ]
+      ],
+      "lookFor": "浮世絵・新版画・創作版画という、版画の幅に注目。美術部は山田ビルの2・3階にあります。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://www.yamada-shoten.com/onlinestore/store.php",
+      "photo": {
+        "src": "photos/osm-node-3343070908.jpg",
+        "alt": "山田書店 美術部の外観（2015年撮影）",
+        "author": "運転太郎",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%B1%B1%E7%94%B0%E6%9B%B8%E5%BA%97_-_panoramio.jpg",
+        "takenAt": "2015年",
+        "note": "2015年当時の外観。現在の美術部は2・3階です。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "osm-node-3342922517",
@@ -522,7 +612,10 @@
       "descriptionSourceLabel": "日本の古本屋｜＠ワンダーの店舗紹介",
       "replacesPlaceIds": [
         "osm-node-3342922517"
-      ]
+      ],
+      "lookFor": "映画のパンフレットやSF・ミステリーなど、本以外の印刷物も手がかりに。作品が読まれ、見られた時代を感じられる店です。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://www.kosho.or.jp/abouts/?id=12011430"
     },
     {
       "id": "osm-node-1634100108",
@@ -563,7 +656,10 @@
       "descriptionSourceLabel": "玉英堂書店｜創業・神保町への移転・取扱分野",
       "replacesPlaceIds": [
         "osm-node-1634100108"
-      ]
+      ],
+      "lookFor": "初版本だけでなく、自筆原稿や書簡を扱うことに注目。印刷された本と、その手前にある筆跡の両方を伝える店です。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://gyokueido.com/"
     },
     {
       "id": "yukyudo-books",
@@ -609,7 +705,21 @@
       "descriptionSourceLabel": "悠久堂書店｜店の歴史と各代の専門分野",
       "replacesPlaceIds": [
         "yukyudo-books"
-      ]
+      ],
+      "lookFor": "山岳・動植物、食文化、美術という分野の組み合わせに注目。代々の店主が増やしてきた専門が、一軒の店に重なっています。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://yukyudou.com/aboutus/",
+      "photo": {
+        "src": "photos/yukyudo-books.jpg",
+        "alt": "悠久堂書店の外観（2015年撮影）",
+        "author": "運転太郎",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%82%A0%E4%B9%85%E5%A0%82%E6%9B%B8%E5%BA%97_-_panoramio.jpg",
+        "takenAt": "2015年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "osm-node-3881341809",
@@ -651,7 +761,10 @@
       "descriptionSourceLabel": "南洋堂書店｜取扱書籍と店舗案内",
       "replacesPlaceIds": [
         "osm-node-3881341809"
-      ]
+      ],
+      "lookFor": "打ち放しコンクリートと、正方形を繰り返す外観を見てみてください。建築の本を扱う店自身も、街で見られる建築の一つです。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://osanpo-jimbo.com/info/5002135"
     },
     {
       "id": "osm-node-4018933613",
@@ -694,7 +807,21 @@
       "descriptionSourceLabel": "文房堂｜創業・移転・画材製造の歴史",
       "replacesPlaceIds": [
         "osm-node-4018933613"
-      ]
+      ],
+      "lookFor": "2階の窓の上のライオン、3階のアーチ窓、外壁の細い筋に注目。1922年の正面外壁を、1990年の建て替え時に残しています。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://www.city.chiyoda.lg.jp/documents/4200/13-bumbodobiru-r405.pdf",
+      "photo": {
+        "src": "photos/osm-node-4018933613.jpg",
+        "alt": "文房堂の外観（2025年撮影）",
+        "author": "Narumi.SBT",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bumpodo_building_01.jpg",
+        "takenAt": "2025年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     },
     {
       "id": "sabouru",
@@ -741,7 +868,21 @@
       ],
       "replacesPlaceIds": [
         "sabouru"
-      ]
+      ],
+      "lookFor": "路地に面した店構えから、店内へ続く段差に注目。中2階と地下を含む3つのフロアが、小さな店の空間をつくっています。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://visit-chiyoda.tokyo/app/spot/detail/482",
+      "photo": {
+        "src": "photos/sabouru.jpg",
+        "alt": "さぼうるの外観（2011年撮影）",
+        "author": "Ogiyoshisan",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sabouru_DSCN2714_20111027.JPG",
+        "takenAt": "2011年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "原画像・変更なし"
+      }
     },
     {
       "id": "kanda-catholic-church",
@@ -781,7 +922,21 @@
       "sourceType": "official",
       "descriptionSourceUrl": "https://catholickandachurch.org/about/church/history/",
       "descriptionSourceLabel": "神田教会｜創立・学校・聖堂の歴史",
-      "replacesPlaceIds": []
+      "replacesPlaceIds": [],
+      "lookFor": "正面の左右で高さの違う屋根と、丸いアーチの窓を見比べてみてください。今見える聖堂は1928年のものです。",
+      "lookForCheckedAt": "2026-11-08",
+      "lookForSourceUrl": "https://catholickandachurch.org/about/church/history/",
+      "photo": {
+        "src": "photos/kanda-catholic-church.jpg",
+        "alt": "カトリック神田教会の外観（2019年撮影）",
+        "author": "江戸村のとくぞう",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kanda_church_201904a.jpg",
+        "takenAt": "2019年",
+        "note": "撮影当時の外観。現在と異なる場合があります。",
+        "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+      }
     }
   ]
 }

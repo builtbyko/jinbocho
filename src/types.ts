@@ -65,6 +65,10 @@ export type PlaceProperties = {
   originalFacadeYear?: number;
   buildingRebuiltYear?: number;
   buildingDescription?: string;
+  lookFor?: string;
+  lookForCheckedAt?: string;
+  lookForSourceUrl?: string;
+  photo?: {src:string;alt:string;author:string;license:string;licenseUrl:string;sourceUrl:string;takenAt:string;note:string;changes:string};
   historySources?: { label: string; url: string }[];
   historyCheckedAt?: string;
   bookwalkImported?: boolean;

@@ -165,6 +165,22 @@ function DetailPanel({
               <div><dt>建物の竣工</dt><dd>{activePlace.properties.buildingCompletedText}</dd></div>
             </dl>
           )}
+          {activePlace.properties.lookFor && <section className="look-for">
+            <h3>ここで見るところ</h3><p>{activePlace.properties.lookFor}</p>
+            <a href={activePlace.properties.lookForSourceUrl} target="_blank" rel="noreferrer">見どころの出典 ↗</a>
+          </section>}
+          {activePlace.properties.photo && <details className="exterior-photo" key={activePlace.properties.id}>
+            <summary>外観写真 <span>{activePlace.properties.photo.takenAt}撮影</span></summary>
+            <figure>
+              <a href={activePlace.properties.photo.sourceUrl} target="_blank" rel="noreferrer" aria-label="写真の原典を開く">
+                <img src={`${import.meta.env.BASE_URL}${activePlace.properties.photo.src}`} alt={activePlace.properties.photo.alt} loading="lazy" decoding="async" />
+              </a>
+              <figcaption>{activePlace.properties.photo.note}<br />
+                写真：{activePlace.properties.photo.author} ／ <a href={activePlace.properties.photo.licenseUrl} target="_blank" rel="noreferrer">{activePlace.properties.photo.license}</a><br />
+                <a href={activePlace.properties.photo.sourceUrl} target="_blank" rel="noreferrer">Wikimedia Commons</a> · {activePlace.properties.photo.changes}
+              </figcaption>
+            </figure>
+          </details>}
           {activePlace.properties.bookwalkImported && <h3 className="history-heading">この場所の歴史</h3>}
           {(activePlace.properties.description || activePlace.properties.specialty) && (
             <p className="lead place-description">{activePlace.properties.description || activePlace.properties.specialty}</p>

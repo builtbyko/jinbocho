@@ -1,0 +1,112 @@
+{
+  "kitazawa-bookstore": {
+    "src": "photos/kitazawa-bookstore.jpg",
+    "alt": "北沢書店の外観（2006年撮影）",
+    "author": "Lombroso",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/File%3AKitazawa%20Foreign%20Bookstore%2C%20at%20Kanda-Jinbocho.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kitazawa_Foreign_Bookstore,_at_Kanda-Jinbocho.jpg",
+    "takenAt": "2006年",
+    "note": "2006年の北沢ビルの外観。当時の1階の店舗表示は現在と異なります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "yaguchi-shoten": {
+    "src": "photos/yaguchi-shoten.jpg",
+    "alt": "矢口書店の外観（2006年撮影）",
+    "author": "Lombroso",
+    "license": "Public domain",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/File%3AYaguchi%20Shoten%2C%20at%20Kanda-Jinbocho.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yaguchi_Shoten,_at_Kanda-Jinbocho.jpg",
+    "takenAt": "2006年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "isseido-booksellers": {
+    "src": "photos/isseido-booksellers.webp",
+    "alt": "一誠堂書店の外観（2026年撮影）",
+    "author": "のののぶ",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E4%B8%80%E8%AA%A0%E5%A0%82_%E5%A4%96%E8%A6%B3.webp",
+    "takenAt": "2026年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "osm-node-1634100115": {
+    "src": "photos/osm-node-1634100115.jpg",
+    "alt": "田村書店の外観（2015年撮影）",
+    "author": "運転太郎",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E7%94%B0%E6%9D%91%E6%9B%B8%E5%BA%97_-_panoramio_(1).jpg",
+    "takenAt": "2015年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "osm-node-1634100079": {
+    "src": "photos/osm-node-1634100079.jpg",
+    "alt": "大屋書房の外観（2015年撮影）",
+    "author": "運転太郎",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E5%B1%8B%E6%9B%B8%E6%88%BF_-_panoramio.jpg",
+    "takenAt": "2015年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "osm-node-3343070908": {
+    "src": "photos/osm-node-3343070908.jpg",
+    "alt": "山田書店 美術部の外観（2015年撮影）",
+    "author": "運転太郎",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%B1%B1%E7%94%B0%E6%9B%B8%E5%BA%97_-_panoramio.jpg",
+    "takenAt": "2015年",
+    "note": "2015年当時の外観。現在の美術部は2・3階です。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "yukyudo-books": {
+    "src": "photos/yukyudo-books.jpg",
+    "alt": "悠久堂書店の外観（2015年撮影）",
+    "author": "運転太郎",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%82%A0%E4%B9%85%E5%A0%82%E6%9B%B8%E5%BA%97_-_panoramio.jpg",
+    "takenAt": "2015年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "osm-node-4018933613": {
+    "src": "photos/osm-node-4018933613.jpg",
+    "alt": "文房堂の外観（2025年撮影）",
+    "author": "Narumi.SBT",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bumpodo_building_01.jpg",
+    "takenAt": "2025年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  },
+  "sabouru": {
+    "src": "photos/sabouru.jpg",
+    "alt": "さぼうるの外観（2011年撮影）",
+    "author": "Ogiyoshisan",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sabouru_DSCN2714_20111027.JPG",
+    "takenAt": "2011年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "原画像・変更なし"
+  },
+  "kanda-catholic-church": {
+    "src": "photos/kanda-catholic-church.jpg",
+    "alt": "カトリック神田教会の外観（2019年撮影）",
+    "author": "江戸村のとくぞう",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kanda_church_201904a.jpg",
+    "takenAt": "2019年",
+    "note": "撮影当時の外観。現在と異なる場合があります。",
+    "changes": "サイズ縮小のみ（Wikimedia Commonsのサムネイル）"
+  }
+}

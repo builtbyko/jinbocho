@@ -1447,3 +1447,9 @@ button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible{o
 .walking-controls button{touch-action:manipulation}
 .detail-note{font-size:12px;line-height:1.8}
 @media(max-width:960px){.detail-head{padding-top:10px}.badges span{font-size:11px}.source-box span{font-size:11px}.about-body p,.about-body li{font-size:13px;line-height:1.8}}
+
+.look-for{padding:14px 15px;margin:0 0 16px;background:#edf1eb;border-left:3px solid #446b5a;border-radius:0 6px 6px 0}
+.look-for h3{margin:0 0 8px;font-size:13px;color:#244e47}.look-for p{margin:0;font-size:14px;line-height:1.9}.look-for>a{display:inline-block;margin-top:8px;font-size:11px;color:#446b5a}
+.exterior-photo{margin:0 0 20px;border:1px solid var(--line);border-radius:6px;overflow:hidden}.exterior-photo summary{padding:12px;font-size:13px;font-weight:650;cursor:pointer;min-height:44px}.exterior-photo summary span{margin-left:8px;font-size:11px;color:var(--muted);font-weight:400}
+.exterior-photo figure{margin:0;padding:0 12px 12px}.exterior-photo img{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:#eeeae2}.exterior-photo figcaption{margin-top:9px;font-size:11px;line-height:1.8;color:#5b645f}.exterior-photo a{color:#446b5a}
+@media(max-width:960px){.look-for p{font-size:15px}.exterior-photo summary{font-size:14px}}
