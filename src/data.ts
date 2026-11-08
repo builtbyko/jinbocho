@@ -1,7 +1,7 @@
 import type { AtlasData } from "./types";
 
 async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${import.meta.env.BASE_URL}data/${path}`);
+  const response = await fetch(`${import.meta.env.BASE_URL}data/${path}?v=${import.meta.env.VITE_ATLAS_DATA_VERSION}`);
   if (!response.ok) {
     throw new Error(`${path} の読込に失敗しました (${response.status})`);
   }

@@ -173,7 +173,7 @@ function DetailPanel({
             <summary>外観写真 <span>{activePlace.properties.photo.takenAt}撮影</span></summary>
             <figure>
               <a href={activePlace.properties.photo.sourceUrl} target="_blank" rel="noreferrer" aria-label="写真の原典を開く">
-                <img src={`${import.meta.env.BASE_URL}${activePlace.properties.photo.src}`} alt={activePlace.properties.photo.alt} loading="lazy" decoding="async" />
+                <img src={`${import.meta.env.BASE_URL}${activePlace.properties.photo.src}?v=${import.meta.env.VITE_ATLAS_DATA_VERSION}`} alt={activePlace.properties.photo.alt} loading="lazy" decoding="async" />
               </a>
               <figcaption>{activePlace.properties.photo.note}<br />
                 写真：{activePlace.properties.photo.author} ／ <a href={activePlace.properties.photo.licenseUrl} target="_blank" rel="noreferrer">{activePlace.properties.photo.license}</a><br />
