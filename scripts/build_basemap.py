@@ -157,6 +157,7 @@ def main() -> None:
         "Only OSM ways explicitly tagged footway=sidewalk are shown; edges are schematic.",
     )
 
+    label_details = json.loads((ROOT / "data/curated/road-labels.json").read_text(encoding="utf-8"))
     labels = []
     for name, parts in sorted(label_lines.items()):
         unioned = unary_union(parts)
@@ -168,7 +169,7 @@ def main() -> None:
         ]
         if segments:
             display_name = "すずらん通り" if name == "神田すずらん通り" else name
-            labels.append(feature(transform(TO_WGS84, max(segments, key=lambda part: part.length)), {"name": display_name, "source_name": name}))
+            labels.append(feature(transform(TO_WGS84, max(segments, key=lambda part: part.length)), {"name": display_name, "source_name": name, **label_details.get(display_name, {"displayName": display_name, "roadKind": "unknown", "routeIcon": ""})}))
     write_geojson("basemap-road-names.geojson", labels, observed_at, "Street names from OSM highway tags.")
     print(f"Built {road_count} road ways, {sidewalk_count} mapped sidewalks, {len(labels)} named streets")
 

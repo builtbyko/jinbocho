@@ -125,6 +125,9 @@ function syncLayers(map: MapLibreMap, visibleLayers: Record<LayerKey, boolean>, 
     }).map(f=>f.properties.buildingId!);
     map.setFilter("history-buildings",["in",["get","id"],["literal",enabledIds]]);
   }
+  for (const id of ["district-plan-fill","district-plan-line"]) map.setLayoutProperty(id,"visibility",visibleLayers.districtPlan ? "visible" : "none");
+  map.setLayoutProperty("road-classification","visibility",visibleLayers.roadTypes ? "visible" : "none");
+  map.setLayoutProperty("road-names","text-field",visibleLayers.roadTypes ? ["case",["==",["get","roadKind"],"metropolitan"],["format",["get","name"],{}," ",{},["image",["get","routeIcon"]],{}],["get","displayName"]] : ["get","name"]);
   const alleyVisibility = visibleLayers.alleys ? "visible" : "none";
   map.setLayoutProperty("alleys-casing", "visibility", alleyVisibility);
   map.setLayoutProperty("alleys-line", "visibility", alleyVisibility);
@@ -277,6 +280,15 @@ export default function MapView({
         source: "outside-context",
         paint: { "raster-opacity": 0.58, "raster-saturation": -0.72 },
       });
+      for (const number of ["301","302"]) {
+        const canvas=document.createElement("canvas");canvas.width=72;canvas.height=72;
+        const ctx=canvas.getContext("2d")!;
+        ctx.beginPath();ctx.moveTo(18,5);ctx.lineTo(54,5);ctx.lineTo(69,36);ctx.lineTo(54,67);ctx.lineTo(18,67);ctx.lineTo(3,36);ctx.closePath();ctx.fillStyle="#235aab";ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.stroke();
+        ctx.fillStyle="#fff";ctx.font="bold 26px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(number,36,37);
+        map.addImage(`route-${number}`,ctx.getImageData(0,0,72,72),{pixelRatio:4});
+      }
+      map.addSource("planning-areas",{type:"geojson",data:data.planningAreas});
+      map.addSource("road-classification",{type:"geojson",data:data.roadClassification});
       map.addSource("boundary", { type: "geojson", data: data.boundary });
       map.addSource("basemap-roads", { type: "geojson", data: data.basemapRoads });
       map.addSource("basemap-sidewalks", { type: "geojson", data: data.basemapSidewalks });
@@ -303,6 +315,7 @@ export default function MapView({
         source: "basemap-roads",
         paint: { "fill-color": "#e9ebe8", "fill-opacity": 1 },
       });
+      map.addLayer({id:"road-classification",type:"line",source:"road-classification",layout:{"line-cap":"round","line-join":"round"},paint:{"line-color":["match",["get","roadKind"],"metropolitan","#b78a2e","ward","#4480ab","national","#b75650","private","#8c6f98","#929894"],"line-width":["interpolate",["linear"],["zoom"],15,.9,18,2.2],"line-opacity":.65}});
       map.addLayer({
         id: "road-edge",
         type: "line",
@@ -415,6 +428,9 @@ export default function MapView({
         source: "boundary",
         paint: { "line-color": "#a9aea9", "line-width": 0.9, "line-opacity": 0.65, "line-dasharray": [3, 3] },
       });
+      map.addLayer({id:"district-plan-fill",type:"fill",source:"planning-areas",filter:["==",["get","kind"],"district_plan"],layout:{visibility:"none"},paint:{"fill-color":"#79609a","fill-opacity":.055}});
+      map.addLayer({id:"district-plan-line",type:"line",source:"planning-areas",filter:["==",["get","kind"],"district_plan"],layout:{visibility:"none"},paint:{"line-color":"#79609a","line-width":1.7,"line-dasharray":[5,2]}});
+      map.addLayer({id:"regeneration-line",type:"line",source:"planning-areas",filter:["==",["get","kind"],"regeneration"],layout:{"line-cap":"round","line-join":"round"},paint:{"line-color":"#bf4242","line-width":1.2,"line-dasharray":[1,3],"line-opacity":.95}});
       // Later symbol layers are placed first: confirmed shops precede general shops,
       // while the street labels below retain priority over both.
       for (const [id, confirmed, minzoom] of [
@@ -546,6 +562,22 @@ export default function MapView({
     if (!map) return;
     syncBuildingSelection(map, selectedBuildingId);
   }, [selectedBuildingId]);
+
+  useEffect(() => {
+    const map=mapRef.current;
+    if (!map || !visibleLayers.districtPlan) return;
+    followRef.current=false;
+    const feature=data.planningAreas.features.find(f=>f.properties?.kind==="district_plan");
+    if (!feature) return;
+    const bounds=new maplibregl.LngLatBounds();
+    const walk=(coordinates: unknown):void => {
+      if (!Array.isArray(coordinates)) return;
+      if (typeof coordinates[0]==="number") bounds.extend(coordinates as [number,number]);
+      else coordinates.forEach(walk);
+    };
+    if ("coordinates" in feature.geometry) walk(feature.geometry.coordinates);
+    map.fitBounds(bounds,{padding:{top:100,bottom:65,left:35,right:55},duration:500});
+  },[visibleLayers.districtPlan,data]);
 
   useEffect(() => {
     const map = mapRef.current;

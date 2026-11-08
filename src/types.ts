@@ -8,7 +8,9 @@ export type LayerKey =
   | "restaurant"
   | "other"
   | "bookEra"
-  | "alleys";
+  | "alleys"
+  | "districtPlan"
+  | "roadTypes";
 
 export type PlaceCategory =
   | "antiquarian_bookstore"
@@ -108,6 +110,8 @@ export type AtlasData = {
   basemapRoads: FeatureCollection<Geometry>;
   basemapSidewalks: FeatureCollection<Geometry>;
   basemapRoadNames: FeatureCollection<Geometry>;
+  planningAreas: FeatureCollection<Geometry>;
+  roadClassification: FeatureCollection<Geometry>;
   buildings: FeatureCollection<Polygon | MultiPolygon, BuildingProperties>;
   places: FeatureCollection<Point, PlaceProperties>;
   alleys: FeatureCollection<Geometry>;

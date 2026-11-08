@@ -9,7 +9,7 @@ async function getJson<T>(path: string): Promise<T> {
 }
 
 export async function loadAtlasData(): Promise<AtlasData> {
-  const [boundary, basemapRoads, basemapSidewalks, basemapRoadNames, buildings, places, alleys, summary] = await Promise.all([
+  const [boundary, basemapRoads, basemapSidewalks, basemapRoadNames, buildings, places, alleys, summary, planningAreas, roadClassification] = await Promise.all([
     getJson<AtlasData["boundary"]>("boundary.geojson"),
     getJson<AtlasData["basemapRoads"]>("basemap-roads.geojson"),
     getJson<AtlasData["basemapSidewalks"]>("basemap-sidewalks.geojson"),
@@ -18,7 +18,9 @@ export async function loadAtlasData(): Promise<AtlasData> {
     getJson<AtlasData["places"]>("places.geojson"),
     getJson<AtlasData["alleys"]>("alleys.geojson"),
     getJson<AtlasData["summary"]>("summary.json"),
+    getJson<AtlasData["planningAreas"]>("planning-areas.geojson"),
+    getJson<AtlasData["roadClassification"]>("road-classification.geojson"),
   ]);
 
-  return { boundary, basemapRoads, basemapSidewalks, basemapRoadNames, buildings, places, alleys, summary };
+  return { boundary, basemapRoads, basemapSidewalks, basemapRoadNames, buildings, places, alleys, summary, planningAreas, roadClassification };
 }

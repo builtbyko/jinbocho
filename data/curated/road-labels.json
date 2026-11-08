@@ -1,0 +1,38 @@
+{
+  "さくら通り": {
+    "roadKind": "ward",
+    "routeNumber": "370",
+    "routeIcon": "",
+    "displayName": "さくら通り（区道）"
+  },
+  "専大通り": {
+    "roadKind": "ward",
+    "routeNumber": "319",
+    "routeIcon": "",
+    "displayName": "専大通り（区道）"
+  },
+  "白山通り": {
+    "roadKind": "metropolitan",
+    "routeNumber": "301",
+    "routeIcon": "route-301",
+    "displayName": "白山通り"
+  },
+  "すずらん通り": {
+    "roadKind": "ward",
+    "routeNumber": "",
+    "routeIcon": "",
+    "displayName": "すずらん通り（区道）"
+  },
+  "雉子橋通り": {
+    "roadKind": "ward",
+    "routeNumber": "312",
+    "routeIcon": "",
+    "displayName": "雉子橋通り（区道）"
+  },
+  "靖国通り": {
+    "roadKind": "metropolitan",
+    "routeNumber": "302",
+    "routeIcon": "route-302",
+    "displayName": "靖国通り"
+  }
+}

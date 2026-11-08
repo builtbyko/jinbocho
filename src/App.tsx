@@ -42,6 +42,8 @@ const initialLayers: Record<LayerKey, boolean> = {
   other: true,
   bookEra: false,
   alleys: false,
+  districtPlan: false,
+  roadTypes: true,
 };
 
 function MapLegend({
@@ -69,6 +71,9 @@ function MapLegend({
       { label: "その他", color: "#dadbd6" },
     );
   }
+  items.push({label:"街並み再生方針の区域（概略）",color:"#bf4242",line:true});
+  if (visibleLayers.districtPlan) items.push({label:"地区計画の区域",color:"#79609a",line:true});
+  if (visibleLayers.roadTypes) items.push({label:"都道",color:"#b78a2e",line:true},{label:"区道",color:"#4480ab",line:true},{label:"区分未確認",color:"#929894",line:true});
   if (visibleLayers.alleys) items.push({ label: "路地・細街路", color: "#495753", line: true });
   if (!items.length && !visibleLayers.bookEra) return null;
 
@@ -383,6 +388,8 @@ export default function App() {
     { id: "cafe", name: "喫茶・カフェ", color: "#4f7f78", count: data.summary.cafeCount },
     { id: "restaurant", name: "飲食店", color: "#7f6b9f", count: data.summary.restaurantCount },
     { id: "other", name: "その他の店・施設", color: "#7389a6", count: otherCount },
+    { id: "districtPlan", name: "地区計画", color: "#79609a", count: 1, line: true },
+    { id: "roadTypes", name: "道路の種類", color: "#4480ab", count: data.roadClassification.features.length, line: true },
     { id: "alleys", name: "路地・細街路", color: "#495753", count: data.summary.alleyCount, line: true },
   ];
 
@@ -449,9 +456,16 @@ export default function App() {
                     aria-hidden="true"
                   />
                   <span className="layer-name">{layer.name}</span>
-                  <span className="layer-count">{layer.count}</span>
+                  <span className="layer-count">{layer.id === "roadTypes" ? "" : layer.count}</span>
                 </label>
               ))}
+            </div>
+            <div className="planning-note">
+              <p><i className="regeneration-swatch" />街並み再生方針の区域（常時表示）</p>
+              <a href="https://www.metro.tokyo.lg.jp/documents/d/tosei/20261016_01_07" target="_blank" rel="noreferrer">東京都の区域図 ↗</a>
+              <p>赤点線は公式区域図から読み取った概略です。</p>
+              {visibleLayers.districtPlan && <p>紫の線：一ツ橋二丁目周辺地区地区計画。<a href="https://www.city.chiyoda.lg.jp/documents/4355/15hitotsubashi.pdf" target="_blank" rel="noreferrer">計画図 ↗</a></p>}
+              {visibleLayers.roadTypes && <><p>黄：都道／青：区道／灰：未確認。道路名の六角形は都道番号です。</p><p>道路区分は白地図の範囲。掲載範囲の国道・私道は確認できていません。区道の一部はOSM参考です。</p><a href="https://www.city.chiyoda.lg.jp/documents/28493/rosenmozu_5.pdf" target="_blank" rel="noreferrer">千代田区路線網図 ↗</a></>}
             </div>
             <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。拡大すると店名が表示されます。建物や店名を押すと、入っている店が見られます。</p>
             {visibleLayers.buildings && <p className="layer-note">灰色の建物は店の情報なし・地上階の店が未判定・非表示中の種類。住宅や空き店舗を示す色ではありません。</p>}

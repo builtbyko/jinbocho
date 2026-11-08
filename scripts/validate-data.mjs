@@ -103,3 +103,24 @@ assert(summary.placeCount === places.features.length, "summary placeCount mismat
 assert(summary.alleyCount === alleys.features.length, "summary alleyCount mismatch");
 
 console.log(`Validated ${buildings.features.length} buildings, ${places.features.length} places, ${alleys.features.length} alleys.`);
+
+const planning = read("public/data/planning-areas.geojson");
+assert(planning.features.length === 2, "planning areas must include regeneration and district plan");
+for (const f of planning.features) {
+ assert(f.properties.sourceUrl?.startsWith("https://") && f.properties.geometryMethod, "planning provenance missing");
+ assert(["Polygon","MultiPolygon"].includes(f.geometry.type), "planning geometry must be a polygon");
+ const visit=c=>{ if(typeof c[0]==="number") assert(c[0]>139.74 && c[0]<139.77 && c[1]>35.68 && c[1]<35.71,"planning coordinates outside Jinbocho"); else c.forEach(visit); };
+ visit(f.geometry.coordinates);
+}
+const roadClasses=read("public/data/road-classification.geojson");
+assert(roadClasses.features.length>0,"road classification missing");
+for(const f of roadClasses.features){
+ assert(["national","metropolitan","ward","private","restricted","unknown"].includes(f.properties.roadKind),"invalid road kind");
+ assert(f.properties.sourceUrl?.startsWith("https://"),"road provenance missing");
+ assert(f.properties.roadKind!=="private" || f.properties.confidence==="confirmed","unverified roads must not be marked private");
+}
+const labels=read("public/data/basemap-road-names.geojson");
+for(const [name,number] of [["白山通り","301"],["靖国通り","302"]]){
+ const p=labels.features.find(f=>f.properties.name===name)?.properties;
+ assert(p?.routeNumber===number && p?.routeIcon===`route-${number}`,`${name}: route shield missing`);
+}
