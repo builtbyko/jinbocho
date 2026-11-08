@@ -377,7 +377,6 @@ export default function App() {
     (place) => layerForCategory(place.properties.category) === "other",
   ).length;
   const layers: { id: LayerKey; name: string; color: string; count: number; line?: boolean }[] = [
-    { id: "buildings", name: "建物", color: "#d9d4c8", count: data.summary.buildingCount },
     { id: "antiquarian_bookstore", name: "古書店", color: "#a6533c", count: countCategory("antiquarian_bookstore") },
     {
       id: "bookEra", name: "創業年代", color: "#6c3328",
@@ -436,8 +435,9 @@ export default function App() {
             ))}
           </details>
 
-          <section className="control-section">
-            <h2>レイヤー</h2>
+          <details className="layer-controls">
+            <summary>レイヤー</summary>
+            <div className="control-section">
             <div className="layer-list">
               {layers.map((layer) => (
                 <label
@@ -470,7 +470,8 @@ export default function App() {
             <p className="layer-note">数字は件数（店は店舗数）。色は建物の代表用途です。拡大すると店名が表示されます。建物や店名を押すと、入っている店が見られます。</p>
             {visibleLayers.buildings && <p className="layer-note">灰色の建物は店の情報なし・地上階の店が未判定・非表示中の種類。住宅や空き店舗を示す色ではありません。</p>}
             {visibleLayers.bookEra && <p className="layer-note">創業年代を確認できた古書店のみ色分けします。</p>}
-          </section>
+            </div>
+          </details>
         </aside>
 
         <section className="map-wrap">

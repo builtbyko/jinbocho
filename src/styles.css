@@ -1458,3 +1458,5 @@ button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible{o
 .google-maps-link:hover{background:#e8efe7}.google-maps-link span{font-size:18px}
 
 .planning-note{margin-top:15px;padding-top:10px;border-top:1px solid var(--line);font-size:11px;line-height:1.7;color:var(--muted)}.planning-note p{margin:7px 0}.planning-note a{color:#446b5a}.regeneration-swatch{display:inline-block;width:20px;border-top:2px dotted #bf4242;margin-right:6px;vertical-align:middle}
+
+.layer-controls{border-bottom:1px solid var(--line)}.layer-controls>summary{padding:19px 16px;font-size:13px;font-weight:700;cursor:pointer;min-height:50px}.layer-controls[open]>summary{border-bottom:1px solid var(--line)}.layer-controls>.control-section{padding-top:10px}
